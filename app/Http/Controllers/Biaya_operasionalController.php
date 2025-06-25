@@ -1,0 +1,108 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Biaya_operasional;
+use App\Models\Data_paket;
+use Illuminate\Http\Request;
+
+class Biaya_operasionalController extends Controller
+{
+    public function index()
+    {
+        $biayas = Biaya_operasional::all();
+        $resis = $biayas->pluck('resi')->filter();
+        $pakets = Data_paket::with('vendors')->whereIn('resi', $resis)->get()->keyBy('resi');
+
+        $data = $biayas->map(function ($item) use ($pakets) {
+            $item->vendor_names = [];
+            $item->total_vendor = 0;
+            $item->total_paket = 0;
+
+            $paket = $pakets[$item->resi] ?? null;
+            if ($paket) {
+                // Ambil nama vendor
+                $item->vendor_names = $paket->vendors->pluck('name')->toArray();
+
+                // Total biaya vendor (dari pivot table)
+                $item->total_vendor = $paket->vendors->sum(function ($vendor) {
+                    return $vendor->pivot->biaya_vendor ?? 0;
+                });
+
+                // Biaya paket langsung dari kolom cost
+                $item->total_paket = $paket->cost ?? 0;
+            }
+
+            $item->total_keseluruhan =
+                ($item->total_vendor ?? 0) +
+                ($item->total_paket ?? 0) +
+                ($item->biaya_lainnya ?? 0);
+
+            return $item;
+        });
+
+        return response()->json($data);
+    }
+
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'resi'            => 'nullable|string|max:255',
+            'total_vendor'    => 'nullable|numeric',
+            'total_paket'     => 'nullable|numeric',
+            'biaya_lainnya'   => 'nullable|numeric',
+            'created_by'      => 'required|exists:users,id',
+        ]);
+
+        $data = Biaya_operasional::create($validated);
+        return response()->json($data, 201);
+    }
+
+    public function show($id)
+    {
+        $item = Biaya_operasional::findOrFail($id);
+        $item->total_keseluruhan = ($item->total_vendor ?? 0) + ($item->total_paket ?? 0) + ($item->biaya_lainnya ?? 0);
+        $item->vendor_names = [];
+
+        $paket = Data_paket::with('vendors')->where('resi', $item->resi)->first();
+        if ($paket && $paket->vendors) {
+            $item->vendor_names = $paket->vendors->pluck('name')->toArray();
+        }
+
+        return response()->json($item);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $biaya = Biaya_operasional::findOrFail($id);
+
+        $validated = $request->validate([
+            'resi'            => 'nullable|string|max:255',
+            'total_vendor'    => 'nullable|numeric',
+            'total_paket'     => 'nullable|numeric',
+            'biaya_lainnya'   => 'nullable|numeric',
+            'created_by'      => 'required|exists:users,id',
+        ]);
+
+        $biaya->update($validated);
+
+        // Update otomatis status jadi 'Terkirim' jika biaya_lainnya > 0
+        if (!empty($validated['biaya_lainnya']) && $validated['biaya_lainnya'] > 0) {
+            $paket = Data_paket::where('resi', $biaya->resi)->first();
+            if ($paket) {
+                $paket->status = 'Terkirim';
+                $paket->save();
+            }
+        }
+
+        return response()->json($biaya);
+    }
+
+
+    public function destroy($id)
+    {
+        Biaya_operasional::destroy($id);
+        return response()->json(null, 204);
+    }
+}

@@ -1,0 +1,75 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Data_paket;
+use App\Models\Biaya_operasional;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Illuminate\Http\Request;
+use Carbon\Carbon;
+
+class LaporanExportController extends Controller
+{
+    public function export(Request $request)
+    {
+        $bulan = $request->query('bulan', date('m'));
+        $tahun = $request->query('tahun', date('Y'));
+
+        $startDate = Carbon::createFromDate($tahun, $bulan)->startOfMonth();
+        $endDate = Carbon::createFromDate($tahun, $bulan)->endOfMonth();
+
+        $paketList = Data_paket::with(['vendors', 'creator'])
+            ->where('status', 'Terkirim')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->get();
+
+        $biayaMap = Biaya_operasional::whereIn('resi', $paketList->pluck('resi'))
+            ->get()
+            ->keyBy('resi');
+
+        // Excel header
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $sheet->setCellValue('A1', 'Resi');
+        $sheet->setCellValue('B1', 'Deskripsi');
+        $sheet->setCellValue('C1', 'Berat');
+        $sheet->setCellValue('D1', 'Volume');
+        $sheet->setCellValue('E1', 'Jumlah Koli');
+        $sheet->setCellValue('F1', 'Kota Tujuan');
+        $sheet->setCellValue('G1', 'Nama Penerima');
+        $sheet->setCellValue('H1', 'No HP Penerima');
+        $sheet->setCellValue('I1', 'Vendor');
+        $sheet->setCellValue('J1', 'Pengirim');
+        $sheet->setCellValue('K1', 'Total Keseluruhan');
+        $sheet->setCellValue('L1', 'Tanggal');
+
+        $row = 2;
+
+        foreach ($paketList as $paket) {
+            $total = $biayaMap[$paket->resi]->total_keseluruhan ?? 0;
+
+            $sheet->setCellValue('A' . $row, $paket->resi);
+            $sheet->setCellValue('B' . $row, $paket->description);
+            $sheet->setCellValue('C' . $row, $paket->weight);
+            $sheet->setCellValue('D' . $row, $paket->volume);
+            $sheet->setCellValue('E' . $row, $paket->jumlah_koli);
+            $sheet->setCellValue('F' . $row, $paket->kota_tujuan);
+            $sheet->setCellValue('G' . $row, $paket->penerima);
+            $sheet->setCellValue('H' . $row, $paket->no_hp_penerima);
+            $sheet->setCellValue('I' . $row, $paket->vendors->pluck('name')->implode(', ') ?: '-');
+            $sheet->setCellValue('J' . $row, $paket->creator->name ?? '-');
+            $sheet->setCellValue('K' . $row, $total);
+            $sheet->setCellValue('L' . $row, $paket->created_at->format('d-m-Y'));
+            $row++;
+        }
+
+        $writer = new Xlsx($spreadsheet);
+        $filename = 'laporan_paket_terkirim_' . $bulan . '_' . $tahun . '.xlsx';
+        $tempFile = tempnam(sys_get_temp_dir(), $filename);
+        $writer->save($tempFile);
+
+        return response()->download($tempFile, $filename)->deleteFileAfterSend(true);
+    }
+}
