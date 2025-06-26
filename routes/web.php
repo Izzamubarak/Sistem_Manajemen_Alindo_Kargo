@@ -2,8 +2,9 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
+use Illuminate\Support\Facades\Artisan;
 // use App\Http\Controllers\PaketExportController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\BiayaExportController;
@@ -90,3 +91,8 @@ Route::post('/logout', function () {
     Auth::logout();
     return redirect('/login');
 })->name('logout');
+
+Route::get('/migrate-now', function () {
+    Artisan::call('migrate', ['--force' => true]);
+    return 'Migrasi berhasil dijalankan!';
+});
