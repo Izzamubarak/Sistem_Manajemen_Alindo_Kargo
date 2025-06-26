@@ -92,3 +92,7 @@ Route::post('/logout', function () {
     return redirect('/login');
 })->name('logout');
 
+Route::get('/seed-user', function () {
+    Artisan::call('db:seed');
+    return 'Seeder dijalankan!';
+});
