@@ -1,9 +1,10 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Artisan;
 // use App\Http\Controllers\PaketExportController;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LaporanController;
@@ -95,4 +96,8 @@ Route::post('/logout', function () {
 Route::get('/seed-user', function () {
     Artisan::call('db:seed');
     return 'Seeder dijalankan!';
+});
+
+Route::get('/cek-user', function () {
+    return User::all();
 });
