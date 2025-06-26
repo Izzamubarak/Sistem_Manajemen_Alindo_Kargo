@@ -101,3 +101,8 @@ Route::get('/seed-user', function () {
 Route::get('/cek-user', function () {
     return User::all();
 });
+
+Route::get('/run-migration', function () {
+    Artisan::call('migrate', ['--force' => true]);
+    return 'Migration done ✅';
+});
