@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,10 +13,12 @@ class AddResiToBiayaOperasionalsTable extends Migration
         });
     }
 
-    public function down()
+    public function down(): void
     {
         Schema::table('biaya_operasionals', function (Blueprint $table) {
-            $table->dropColumn('resi');
+            if (Schema::hasColumn('biaya_operasionals', 'resi')) {
+                $table->dropColumn('resi');
+            }
         });
     }
 }

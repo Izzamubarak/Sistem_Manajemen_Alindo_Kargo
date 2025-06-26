@@ -92,7 +92,3 @@ Route::post('/logout', function () {
     return redirect('/login');
 })->name('logout');
 
-Route::get('/migrate-now', function () {
-    Artisan::call('migrate', ['--force' => true]);
-    return 'Migrasi berhasil dijalankan!';
-});

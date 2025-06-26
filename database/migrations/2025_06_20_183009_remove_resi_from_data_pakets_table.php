@@ -15,7 +15,9 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::table('data_pakets', function (Blueprint $table) {
-            $table->string('resi')->after('cost');
+            if (!Schema::hasColumn('data_pakets', 'resi')) {
+                $table->string('resi')->after('cost');
+            }
         });
     }
 };

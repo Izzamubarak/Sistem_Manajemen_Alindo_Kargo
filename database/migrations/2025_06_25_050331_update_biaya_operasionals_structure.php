@@ -43,18 +43,32 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::table('biaya_operasionals', function (Blueprint $table) {
-            $table->dropColumn([
-                'resi',
-                'vendor_info',
-                'total_vendor',
-                'total_paket',
-                'biaya_lainnya',
-                'total_keseluruhan',
-            ]);
+            if (Schema::hasColumn('biaya_operasionals', 'vendor_info')) {
+                $table->dropColumn('vendor_info');
+            }
+            if (Schema::hasColumn('biaya_operasionals', 'total_vendor')) {
+                $table->dropColumn('total_vendor');
+            }
+            if (Schema::hasColumn('biaya_operasionals', 'total_paket')) {
+                $table->dropColumn('total_paket');
+            }
+            if (Schema::hasColumn('biaya_operasionals', 'biaya_lainnya')) {
+                $table->dropColumn('biaya_lainnya');
+            }
+            if (Schema::hasColumn('biaya_operasionals', 'total_keseluruhan')) {
+                $table->dropColumn('total_keseluruhan');
+            }
 
-            $table->string('description');
-            $table->integer('amount');
-            $table->date('date');
+            // Tambahkan kembali kolom lama hanya jika belum ada
+            if (!Schema::hasColumn('biaya_operasionals', 'description')) {
+                $table->string('description')->nullable();
+            }
+            if (!Schema::hasColumn('biaya_operasionals', 'amount')) {
+                $table->integer('amount')->default(0);
+            }
+            if (!Schema::hasColumn('biaya_operasionals', 'date')) {
+                $table->date('date')->nullable();
+            }
         });
     }
 };
