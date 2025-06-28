@@ -46,7 +46,7 @@
                 resi: this.resi.value,
             };
 
-            const response = await fetch('http://localhost:8000/api/biaya', {
+            const response = await fetch('/api/biaya', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

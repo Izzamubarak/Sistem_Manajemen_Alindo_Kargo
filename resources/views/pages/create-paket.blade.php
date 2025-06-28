@@ -107,7 +107,7 @@
             const token = localStorage.getItem('token');
 
             try {
-                const userRes = await fetch('http://localhost:8000/api/user', {
+                const userRes = await fetch('/api/user', {
                     headers: {
                         'Authorization': 'Bearer ' + token,
                         'Accept': 'application/json'
@@ -115,7 +115,7 @@
                 });
                 userData = await userRes.json();
 
-                const vendorRes = await fetch('http://localhost:8000/api/vendor', {
+                const vendorRes = await fetch('/api/vendor', {
                     headers: {
                         'Authorization': 'Bearer ' + token,
                         'Accept': 'application/json'
@@ -201,7 +201,7 @@
             };
 
             try {
-                const response = await fetch('http://localhost:8000/api/paket', {
+                const response = await fetch('/api/paket', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

@@ -39,7 +39,7 @@
             const id = "{{ $id }}";
             const form = document.getElementById('editBiayaForm');
 
-            const res = await fetch(`http://localhost:8000/api/biaya/${id}`, {
+            const res = await fetch(`/api/biaya/${id}`, {
                 headers: {
                     'Authorization': 'Bearer ' + token,
                     'Accept': 'application/json'
@@ -63,7 +63,7 @@
                     created_by: JSON.parse(localStorage.getItem('user')).id
                 };
 
-                const update = await fetch(`http://localhost:8000/api/biaya/${id}`, {
+                const update = await fetch(`/api/biaya/${id}`, {
                     method: 'PUT',
                     headers: {
                         'Authorization': 'Bearer ' + token,

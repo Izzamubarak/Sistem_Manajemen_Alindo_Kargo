@@ -36,7 +36,7 @@
                 created_by: user.id
             };
 
-            const response = await fetch('http://localhost:8000/api/vendor', {
+            const response = await fetch('/api/vendor', {
                 method: 'POST',
                 headers: {
                     'Authorization': 'Bearer ' + token,

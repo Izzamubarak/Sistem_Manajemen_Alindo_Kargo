@@ -95,13 +95,13 @@
             const token = localStorage.getItem("token");
 
             const [paketRes, vendorRes] = await Promise.all([
-                fetch(`http://localhost:8000/api/paket/${id}`, {
+                fetch(`/api/paket/${id}`, {
                     headers: {
                         Authorization: "Bearer " + token,
                         Accept: "application/json"
                     }
                 }),
-                fetch("http://localhost:8000/api/vendor", {
+                fetch('/api/vendor', {
                     headers: {
                         Authorization: "Bearer " + token,
                         Accept: "application/json"
@@ -157,7 +157,7 @@
                     vendor_biayas: vendorBiayas
                 };
 
-                const resUpdate = await fetch(`http://localhost:8000/api/paket/${data.id}`, {
+                const resUpdate = await fetch(`/api/paket/${data.id}`, {
                     method: "PUT",
                     headers: {
                         "Authorization": "Bearer " + token,

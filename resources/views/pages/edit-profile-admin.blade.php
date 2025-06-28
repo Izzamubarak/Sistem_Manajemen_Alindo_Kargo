@@ -33,7 +33,7 @@
         document.addEventListener('DOMContentLoaded', async () => {
             const token = localStorage.getItem("token");
 
-            const res = await fetch("http://localhost:8000/api/profile/admin", {
+            const res = await fetch('/api/profile/admin', {
                 headers: {
                     "Authorization": "Bearer " + token,
                     "Accept": "application/json",
@@ -59,7 +59,7 @@
                     formData.password = this.password.value;
                 }
 
-                const updateRes = await fetch("http://localhost:8000/api/profile/admin", {
+                const updateRes = await fetch('/api/profile/admin', {
                     method: "PUT",
                     headers: {
                         "Authorization": "Bearer " + token,

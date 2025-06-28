@@ -28,7 +28,7 @@
             const user = JSON.parse(localStorage.getItem('user'));
             const id = {{ $id }};
 
-            const res = await fetch(`http://localhost:8000/api/vendor/${id}`, {
+            const res = await fetch(`/api/vendor/${id}`, {
                 headers: {
                     'Authorization': 'Bearer ' + token,
                     'Accept': 'application/json'
@@ -51,7 +51,7 @@
                     created_by: user.id
                 };
 
-                const update = await fetch(`http://localhost:8000/api/vendor/${id}`, {
+                const update = await fetch(`/api/vendor/${id}`, {
                     method: 'PUT',
                     headers: {
                         'Authorization': 'Bearer ' + token,
