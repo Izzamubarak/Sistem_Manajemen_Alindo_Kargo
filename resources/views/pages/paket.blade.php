@@ -132,7 +132,7 @@
                 return;
             }
             try {
-                const response = await fetch('http://localhost:8000/api/paket', {
+                const response = await fetch('/api/paket', {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Accept': 'application/json'
@@ -160,7 +160,7 @@
                     const vendorList = (item.vendors || [])
                         .map(v =>
                             `${v.name} (Rp${parseInt(v.pivot?.biaya_vendor || 0).toLocaleString('id-ID')})`
-                            )
+                        )
                         .join('<br>');
 
                     const pengirim = item.creator?.name || '-'; // ✅ ambil nama user yang buat
@@ -215,7 +215,7 @@
         async function lihatInvoice(paketId) {
             const token = localStorage.getItem("token");
             try {
-                const response = await fetch(`http://localhost:8000/api/paket/${paketId}`, {
+                const response = await fetch(`/api/paket/${paketId}`, {
                     headers: {
                         'Authorization': 'Bearer ' + token,
                         'Accept': 'application/json'
@@ -250,7 +250,7 @@
             if (!confirm("Yakin ingin menghapus paket ini?")) return;
 
             const token = localStorage.getItem("token");
-            const res = await fetch(`http://localhost:8000/api/paket/${id}`, {
+            const res = await fetch(`/api/paket/${id}`, {
                 method: "DELETE",
                 headers: {
                     'Authorization': 'Bearer ' + token,
@@ -279,7 +279,7 @@
             const status = document.getElementById("statusSelect").value;
             const token = localStorage.getItem("token");
 
-            const res = await fetch(`http://localhost:8000/api/paket/${id}`, {
+            const res = await fetch(`/api/paket/${id}`, {
                 method: "PUT",
                 headers: {
                     "Authorization": "Bearer " + token,

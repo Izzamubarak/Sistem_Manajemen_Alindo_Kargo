@@ -32,7 +32,7 @@
             const tbody = document.getElementById('userBody');
 
             try {
-                const response = await fetch('http://localhost:8000/api/profile/tim-operasional', {
+                const response = await fetch('/api/profile/tim-operasional', {
                     headers: {
                         'Authorization': 'Bearer ' + token,
                         'Accept': 'application/json'
@@ -67,14 +67,14 @@
                 }
             } catch (err) {
                 tbody.innerHTML =
-                `<tr><td colspan="5" class="text-danger text-center">${err.message}</td></tr>`;
+                    `<tr><td colspan="5" class="text-danger text-center">${err.message}</td></tr>`;
             }
         });
 
         async function hapusUser(id) {
             if (confirm("Yakin ingin menghapus user ini?")) {
                 const token = localStorage.getItem("token");
-                const res = await fetch(`http://localhost:8000/api/profile/tim-operasional/${id}`, {
+                const res = await fetch(`/api/profile/tim-operasional/${id}`, {
                     method: "DELETE",
                     headers: {
                         'Authorization': 'Bearer ' + token,

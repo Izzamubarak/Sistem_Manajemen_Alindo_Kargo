@@ -31,7 +31,7 @@
             const tbody = document.getElementById('vendorBody');
 
             try {
-                const res = await fetch('http://localhost:8000/api/vendor', {
+                const res = await fetch('/api/vendor', {
                     headers: {
                         'Authorization': 'Bearer ' + token,
                         'Accept': 'application/json'
@@ -43,7 +43,7 @@
 
                 if (data.length === 0) {
                     tbody.innerHTML =
-                    `<tr><td colspan="5" class="text-center">Tidak ada data vendor.</td></tr>`;
+                        `<tr><td colspan="5" class="text-center">Tidak ada data vendor.</td></tr>`;
                 } else {
                     data.forEach((v, i) => {
                         tbody.innerHTML += `
@@ -70,7 +70,7 @@
             if (!confirm("Yakin ingin menghapus vendor ini?")) return;
             const token = localStorage.getItem('token');
 
-            const res = await fetch(`http://localhost:8000/api/vendor/${id}`, {
+            const res = await fetch(`/api/vendor/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': 'Bearer ' + token,
