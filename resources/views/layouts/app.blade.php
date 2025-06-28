@@ -15,7 +15,7 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
 
         <!-- ✅ Local Style -->
-        <link href="{{ asset('css/styles.css') }}" rel="stylesheet" />
+        <link href="{{ secure_asset('css/styles.css') }}" rel="stylesheet" />
     </head>
 
 </head>
