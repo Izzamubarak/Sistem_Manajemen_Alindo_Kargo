@@ -43,6 +43,7 @@ class Data_paketController extends Controller
 
         $paket = Data_paket::create($validated);
 
+        $vendorData = []; 
         // Attach vendor dan biaya_vendor
         if ($request->has('vendor_ids') && is_array($request->vendor_ids)) {
             $vendorData = [];
