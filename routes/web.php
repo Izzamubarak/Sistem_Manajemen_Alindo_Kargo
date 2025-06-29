@@ -90,8 +90,11 @@ Route::get('/vendor/edit/{id}', function ($id) {
 
 Route::post('/logout', function () {
     Auth::logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken(); // Tambahan keamanan
+
     return redirect('/login');
-})->name('logout');
+})->middleware('auth')->name('logout');
 
 Route::get('/seed-user', function () {
     Artisan::call('db:seed');
