@@ -6,6 +6,8 @@ use App\Models\Data_paket;
 use App\Models\Biaya_operasional;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Borders;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -28,7 +30,6 @@ class LaporanExportController extends Controller
             ->get()
             ->keyBy('resi');
 
-        // Excel header
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
@@ -42,13 +43,24 @@ class LaporanExportController extends Controller
         $sheet->setCellValue('H1', 'No HP Penerima');
         $sheet->setCellValue('I1', 'Vendor');
         $sheet->setCellValue('J1', 'Pengirim');
-        $sheet->setCellValue('K1', 'Total Keseluruhan');
-        $sheet->setCellValue('L1', 'Tanggal');
+        $sheet->setCellValue('K1', 'Total Vendor');
+        $sheet->setCellValue('L1', 'Biaya Lainnya');
+        $sheet->setCellValue('M1', 'Pengeluaran');
+        $sheet->setCellValue('N1', 'Pendapatan');
+        $sheet->setCellValue('O1', 'Tanggal');
 
         $row = 2;
 
         foreach ($paketList as $paket) {
-            $total = $biayaMap[$paket->resi]->total_keseluruhan ?? 0;
+            $biaya = $biayaMap[$paket->resi] ?? null;
+
+            $total_vendor = $biaya->total_vendor ?? 0;
+            $biaya_lain = is_array($biaya->biaya_lainnya)
+                ? collect($biaya->biaya_lainnya)->sum()
+                : ($biaya->biaya_lainnya ?? 0);
+
+            $pengeluaran = $total_vendor + $biaya_lain;
+            $pendapatan = ($paket->cost ?? 0) - $pengeluaran;
 
             $sheet->setCellValue('A' . $row, $paket->resi);
             $sheet->setCellValue('B' . $row, $paket->description);
@@ -60,10 +72,25 @@ class LaporanExportController extends Controller
             $sheet->setCellValue('H' . $row, $paket->no_hp_penerima);
             $sheet->setCellValue('I' . $row, $paket->vendors->pluck('name')->implode(', ') ?: '-');
             $sheet->setCellValue('J' . $row, $paket->creator->name ?? '-');
-            $sheet->setCellValue('K' . $row, $total);
-            $sheet->setCellValue('L' . $row, $paket->created_at->format('d-m-Y'));
+            $sheet->setCellValue('K' . $row, $total_vendor);
+            $sheet->setCellValue('L' . $row, $biaya_lain);
+            $sheet->setCellValue('M' . $row, $pengeluaran);
+            $sheet->setCellValue('N' . $row, $pendapatan);
+            $sheet->setCellValue('O' . $row, $paket->created_at->format('d-m-Y'));
+
             $row++;
         }
+
+        // Tambahkan border ke semua sel
+        $styleArray = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => Border::BORDER_THIN,
+                ],
+            ],
+        ];
+        $lastRow = $row - 1;
+        $sheet->getStyle("A1:O$lastRow")->applyFromArray($styleArray);
 
         $writer = new Xlsx($spreadsheet);
         $filename = 'laporan_paket_terkirim_' . $bulan . '_' . $tahun . '.xlsx';

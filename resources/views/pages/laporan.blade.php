@@ -40,7 +40,8 @@
                     <th>No HP Penerima</th>
                     <th>Vendor</th>
                     <th>Pengirim</th>
-                    <th>Total Keseluruhan</th>
+                    <th>Pengeluaran</th>
+                    <th>Pendapatan</th>
                     <th>Tanggal</th>
                 </tr>
             </thead>
@@ -57,7 +58,14 @@
                         <td>{{ $paket->no_hp_penerima }}</td>
                         <td>{{ $paket->vendors->pluck('name')->implode(', ') ?: '-' }}</td>
                         <td>{{ $paket->creator->name ?? '-' }}</td>
-                        <td>Rp {{ number_format($paket->total_keseluruhan, 0, ',', '.') }}</td>
+                        @php
+                            $biayaVendor = $paket->vendors->sum('pivot.biaya_vendor') ?? 0;
+                            $biayaLainnya = is_array($paket->biaya_lainnya) ? array_sum($paket->biaya_lainnya) : 0;
+                            $pengeluaran = $biayaVendor + $biayaLainnya;
+                            $pendapatan = $paket->cost ?? 0;
+                        @endphp
+                        <td>Rp {{ number_format($pengeluaran, 0, ',', '.') }}</td>
+                        <td>Rp {{ number_format($pendapatan, 0, ',', '.') }}</td>
                         <td>{{ $paket->created_at->format('d-m-Y') }}</td>
                     </tr>
                 @empty

@@ -29,7 +29,13 @@ class LaporanController extends Controller
 
         // Gabungkan biaya operasional ke paket
         $data = $paketList->map(function ($paket) use ($biayaMap) {
-            $paket->total_keseluruhan = $biayaMap[$paket->resi]->total_keseluruhan ?? 0;
+            $biaya = $biayaMap[$paket->resi] ?? null;
+
+            $paket->total_vendor = $biaya->total_vendor ?? 0;
+            $paket->biaya_lainnya = is_array($biaya->biaya_lainnya) ? collect($biaya->biaya_lainnya)->sum() : ($biaya->biaya_lainnya ?? 0);
+            $paket->pengeluaran = $paket->total_vendor + $paket->biaya_lainnya;
+            $paket->pendapatan = $paket->cost - $paket->pengeluaran;
+
             return $paket;
         });
 

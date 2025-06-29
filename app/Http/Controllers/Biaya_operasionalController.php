@@ -51,7 +51,7 @@ class Biaya_operasionalController extends Controller
             'resi'            => 'nullable|string|max:255',
             'total_vendor'    => 'nullable|numeric',
             'total_paket'     => 'nullable|numeric',
-            'biaya_lainnya'   => 'nullable|numeric',
+            'biaya_lainnya' => 'nullable|array',
             'created_by'      => 'required|exists:users,id',
         ]);
 
@@ -81,7 +81,7 @@ class Biaya_operasionalController extends Controller
             'resi'            => 'nullable|string|max:255',
             'total_vendor'    => 'nullable|numeric',
             'total_paket'     => 'nullable|numeric',
-            'biaya_lainnya'   => 'nullable|numeric',
+            'biaya_lainnya' => 'nullable|array',
             'created_by'      => 'required|exists:users,id',
         ]);
 

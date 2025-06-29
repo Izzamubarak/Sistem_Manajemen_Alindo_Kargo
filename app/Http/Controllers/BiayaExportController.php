@@ -6,6 +6,8 @@ use App\Models\Biaya_operasional;
 use App\Models\Data_paket;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Borders;
 use Carbon\Carbon;
 
 class BiayaExportController extends Controller
@@ -24,21 +26,20 @@ class BiayaExportController extends Controller
             $paket = $pakets[$item->resi] ?? null;
             if ($paket) {
                 $item->vendor_names = $paket->vendors->pluck('name')->toArray();
-                $item->total_vendor = $paket->vendors->sum(function ($vendor) {
-                    return $vendor->pivot->biaya_vendor ?? 0;
-                });
+                $item->total_vendor = $paket->vendors->sum(fn($vendor) => $vendor->pivot->biaya_vendor ?? 0);
                 $item->total_paket = $paket->cost ?? 0;
             }
 
-            $item->total_keseluruhan =
-                ($item->total_vendor ?? 0) +
-                ($item->total_paket ?? 0) +
-                ($item->biaya_lainnya ?? 0);
+            $item->total_biaya_lainnya = is_array($item->biaya_lainnya)
+                ? collect($item->biaya_lainnya)->sum()
+                : ($item->biaya_lainnya ?? 0);
+
+            $item->pengeluaran = $item->total_vendor + $item->total_biaya_lainnya;
+            $item->pendapatan = $item->total_paket - $item->pengeluaran;
 
             return $item;
         });
 
-        // Mulai buat Excel
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
@@ -48,21 +49,33 @@ class BiayaExportController extends Controller
         $sheet->setCellValue('C1', 'Total Vendor');
         $sheet->setCellValue('D1', 'Total Paket');
         $sheet->setCellValue('E1', 'Biaya Lainnya');
-        $sheet->setCellValue('F1', 'Total Keseluruhan');
-        $sheet->setCellValue('G1', 'Tanggal');
+        $sheet->setCellValue('F1', 'Pengeluaran');
+        $sheet->setCellValue('G1', 'Pendapatan');
+        $sheet->setCellValue('H1', 'Tanggal');
 
-        // Data isi
+        // Data
         $row = 2;
         foreach ($data as $item) {
             $sheet->setCellValue('A' . $row, $item->resi);
             $sheet->setCellValue('B' . $row, implode(', ', $item->vendor_names));
             $sheet->setCellValue('C' . $row, $item->total_vendor);
             $sheet->setCellValue('D' . $row, $item->total_paket);
-            $sheet->setCellValue('E' . $row, $item->biaya_lainnya);
-            $sheet->setCellValue('F' . $row, $item->total_keseluruhan);
-            $sheet->setCellValue('G' . $row, Carbon::parse($item->created_at)->format('d-m-Y'));
+            $sheet->setCellValue('E' . $row, $item->total_biaya_lainnya);
+            $sheet->setCellValue('F' . $row, $item->pengeluaran);
+            $sheet->setCellValue('G' . $row, $item->pendapatan);
+            $sheet->setCellValue('H' . $row, Carbon::parse($item->created_at)->format('d-m-Y'));
             $row++;
         }
+
+        // Tambahkan border ke seluruh sel
+        $lastRow = $row - 1;
+        $sheet->getStyle("A1:H$lastRow")->applyFromArray([
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => Border::BORDER_THIN,
+                ],
+            ],
+        ]);
 
         $writer = new Xlsx($spreadsheet);
         $filename = 'biaya_operasional_terkini.xlsx';
