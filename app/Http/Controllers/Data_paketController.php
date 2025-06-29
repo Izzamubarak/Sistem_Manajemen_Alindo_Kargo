@@ -44,14 +44,7 @@ class Data_paketController extends Controller
         $paket = Data_paket::create($validated);
 
         // Attach vendor dan biaya_vendor
-        $vendorData = [];
-        foreach ($request->vendor_ids as $id) {
-            $id = (string) $id;
-            $biaya = $request->vendor_biayas[$id] ?? 0;
-            $vendorData[$id] = ['biaya_vendor' => $biaya];
-        }
-
-        if (!empty($request->vendor_ids)) {
+        if ($request->has('vendor_ids') && is_array($request->vendor_ids)) {
             $vendorData = [];
             foreach ($request->vendor_ids as $id) {
                 $id = (string) $id;
@@ -60,6 +53,7 @@ class Data_paketController extends Controller
             }
             $paket->vendors()->attach($vendorData);
         }
+
 
         // Hitung total biaya vendor & paket
         $totalVendor = collect($vendorData)->pluck('biaya_vendor')->sum();
