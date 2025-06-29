@@ -69,7 +69,7 @@
             const id = "{{ $id }}";
             const form = document.getElementById('editBiayaForm');
 
-            console.log("Data dikirim:", updated);
+
             const res = await fetch(`/api/biaya/${id}`, {
                 headers: {
                     'Authorization': 'Bearer ' + token,
@@ -93,13 +93,16 @@
 
                 const kegiatan = document.getElementsByName('kegiatan[]');
                 const biaya = document.getElementsByName('biaya[]');
-                let biaya_lainnya = {};
+                let biaya_lainnya = [];
 
                 for (let i = 0; i < kegiatan.length; i++) {
                     const ket = kegiatan[i].value.trim();
                     const nilai = parseFloat(biaya[i].value) || 0;
                     if (ket) {
-                        biaya_lainnya[ket] = nilai;
+                        biaya_lainnya.push({
+                            kegiatan: ket,
+                            biaya: nilai
+                        });
                     }
                 }
 
@@ -110,7 +113,7 @@
                     biaya_lainnya: biaya_lainnya,
                     created_by: JSON.parse(localStorage.getItem('user')).id
                 };
-
+                console.log('Data yang dikirim ke server:', updated);
                 const update = await fetch(`/api/biaya/${id}`, {
                     method: 'PUT',
                     headers: {
