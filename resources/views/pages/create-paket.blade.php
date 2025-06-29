@@ -21,9 +21,9 @@
 
             <div class="form-group">
                 <label>Kota Asal</label>
-                <input type="text" name="kota_asal" class="form-control" required>
+                <input type="text" name="kota_asal" class="form-control" value="Yogyakarta" readonly>
             </div>
-
+            
             <div class="form-group">
                 <label>Kota Tujuan</label>
                 <input type="text" name="kota_tujuan" class="form-control" required>
