@@ -182,8 +182,6 @@
             });
 
             const formData = {
-                vendor_ids: vendorIds,
-                vendor_biayas: vendorBiayas,
                 resi: form.resi.value,
                 description: form.description.value,
                 kota_asal: form.kota_asal.value,
@@ -199,6 +197,10 @@
                 alamat_penerima: form.alamat_penerima.value,
                 status: "Dalam Proses"
             };
+            if (vendorIds.length > 0) {
+                formData.vendor_ids = vendorIds;
+                formData.vendor_biayas = vendorBiayas;
+            }
 
             try {
                 const response = await fetch('/api/paket', {

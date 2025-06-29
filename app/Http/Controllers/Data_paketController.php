@@ -19,10 +19,10 @@ class Data_paketController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'vendor_ids'       => 'required|array',
+            'vendor_ids'       => 'nullable|array',
             'vendor_ids.*'     => 'exists:vendors,id',
-            'vendor_biayas'    => 'required|array',
-            'vendor_biayas.*'  => 'required|numeric|min:0',
+            'vendor_biayas'    => 'nullable|array',
+            'vendor_biayas.*'  => 'nullable|numeric|min:0',
             'resi'             => 'required|string|unique:data_pakets,resi',
             'description'      => 'sometimes|string',
             'kota_asal'        => 'sometimes|string',
@@ -51,9 +51,15 @@ class Data_paketController extends Controller
             $vendorData[$id] = ['biaya_vendor' => $biaya];
         }
 
-
-
-        $paket->vendors()->attach($vendorData);
+        if (!empty($request->vendor_ids)) {
+            $vendorData = [];
+            foreach ($request->vendor_ids as $id) {
+                $id = (string) $id;
+                $biaya = $request->vendor_biayas[$id] ?? 0;
+                $vendorData[$id] = ['biaya_vendor' => $biaya];
+            }
+            $paket->vendors()->attach($vendorData);
+        }
 
         // Hitung total biaya vendor & paket
         $totalVendor = collect($vendorData)->pluck('biaya_vendor')->sum();
