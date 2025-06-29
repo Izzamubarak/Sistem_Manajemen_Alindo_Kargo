@@ -16,12 +16,13 @@
                     <th>Resi</th>
                     <th>Vendor</th>
                     <th>Total Vendor</th>
-                    <th>Total Paket</th>
                     <th>Biaya Lainnya</th>
-                    <th>Total Keseluruhan</th>
+                    <th>Pengeluaran</th>
+                    <th>Pendapatan</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
+
             <tbody id="biayaBody">
                 <tr>
                     <td colspan="8" class="text-center">Memuat data...</td>
@@ -66,23 +67,38 @@
                         const vendorList = (item.vendor_names || []).join(', ');
                         const totalVendor = parseFloat(item.total_vendor || 0);
                         const totalPaket = parseFloat(item.total_paket || 0);
-                        const biayaLainnya = parseFloat(item.biaya_lainnya || 0);
-                        const totalKeseluruhan = totalVendor + totalPaket + biayaLainnya;
+
+                        let biayaLainnya = 0;
+                        let biayaLainnyaText = "-";
+
+                        if (item.biaya_lainnya && typeof item.biaya_lainnya === 'object') {
+                            const entries = Object.entries(item.biaya_lainnya).map(
+                                ([keg, nominal]) => {
+                                    biayaLainnya += parseFloat(nominal) || 0;
+                                    return `${keg}: Rp${(nominal || 0).toLocaleString()}`;
+                                }
+                            );
+                            biayaLainnyaText = entries.join("<br>");
+                        }
+
+                        const pengeluaran = totalVendor + biayaLainnya;
+                        const pendapatan = totalPaket;
+
 
                         tbody.innerHTML += `
-                            <tr>
-                                <td>${index + 1}</td>
-                                <td>${item.resi ?? '-'}</td>
-                                <td>${vendorList || '-'}</td>
-                                <td>Rp${totalVendor.toLocaleString()}</td>
-                                <td>Rp${totalPaket.toLocaleString()}</td>
-                                <td>Rp${biayaLainnya.toLocaleString()}</td>
-                                <td>Rp${totalKeseluruhan.toLocaleString()}</td>
-                                <td>
-                                    <a href="/biaya/edit/${item.id}" class="btn btn-sm btn-warning">Edit</a>
-                                    <button class="btn btn-sm btn-danger" onclick="hapusBiaya(${item.id})">Hapus</button>
-                                </td>
-                            </tr>
+                         <tr>
+                            <td>${index + 1}</td>
+                            <td>${item.resi ?? '-'}</td>
+                            <td>${vendorList || '-'}</td>
+                            <td>Rp${totalVendor.toLocaleString()}</td>
+                            <td>${biayaLainnyaText}</td>
+                            <td>Rp${pengeluaran.toLocaleString()}</td>
+                            <td>Rp${pendapatan.toLocaleString()}</td>
+                            <td>
+                                <a href="/biaya/edit/${item.id}" class="btn btn-sm btn-warning">Edit</a>
+                                <button class="btn btn-sm btn-danger" onclick="hapusBiaya(${item.id})">Hapus</button>
+                            </td>
+                        </tr>
                         `;
                     });
                 }
@@ -109,7 +125,7 @@
                 alert("Data berhasil dihapus");
                 location.reload();
             } else {
-                alert("Gagal menghapus data");
+                alert("Gagal menghapus data"); 
             }
         }
     </script>

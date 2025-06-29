@@ -41,6 +41,29 @@
     </div>
 
     <script>
+        function tambahKegiatan(keterangan = '', nominal = '') {
+            const container = document.getElementById('biayaLainnyaContainer');
+            const row = document.createElement('div');
+            row.className = 'form-row d-flex mb-2';
+            row.innerHTML = `
+        <input type="text" name="kegiatan[]" class="form-control mr-2" placeholder="Keterangan" value="${keterangan}" required>
+        <input type="number" name="biaya[]" class="form-control mr-2 biaya-item" placeholder="Biaya (Rp)" value="${nominal}" required>
+        <button type="button" class="btn btn-danger" onclick="this.parentNode.remove(); hitungTotal();">Hapus</button>
+    `;
+            container.appendChild(row);
+            hitungTotal();
+        }
+
+        function hitungTotal() {
+            const biayaInputs = document.querySelectorAll('.biaya-item');
+            let total = 0;
+            biayaInputs.forEach(input => {
+                total += parseFloat(input.value) || 0;
+            });
+            document.getElementById('totalBiayaLainnya').value = total;
+        }
+
+
         document.addEventListener('DOMContentLoaded', async () => {
             const token = localStorage.getItem('token');
             const id = "{{ $id }}";
@@ -62,28 +85,6 @@
                     tambahKegiatan(keterangan, nominal);
                 }
                 hitungTotal(); // tampilkan total otomatis
-            }
-
-            function tambahKegiatan(keterangan = '', nominal = '') {
-                const container = document.getElementById('biayaLainnyaContainer');
-                const row = document.createElement('div');
-                row.className = 'form-row d-flex mb-2';
-                row.innerHTML = `
-        <input type="text" name="kegiatan[]" class="form-control mr-2" placeholder="Keterangan" value="${keterangan}" required>
-        <input type="number" name="biaya[]" class="form-control mr-2 biaya-item" placeholder="Biaya (Rp)" value="${nominal}" required>
-        <button type="button" class="btn btn-danger" onclick="this.parentNode.remove(); hitungTotal();">Hapus</button>
-    `;
-                container.appendChild(row);
-                hitungTotal();
-            }
-
-            function hitungTotal() {
-                const biayaInputs = document.querySelectorAll('.biaya-item');
-                let total = 0;
-                biayaInputs.forEach(input => {
-                    total += parseFloat(input.value) || 0;
-                });
-                document.getElementById('totalBiayaLainnya').value = total;
             }
 
             form.addEventListener('submit', async (e) => {
