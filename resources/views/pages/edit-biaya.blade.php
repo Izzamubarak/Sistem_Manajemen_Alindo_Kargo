@@ -69,6 +69,7 @@
             const id = "{{ $id }}";
             const form = document.getElementById('editBiayaForm');
 
+            console.log("Data dikirim:", updated);
             const res = await fetch(`/api/biaya/${id}`, {
                 headers: {
                     'Authorization': 'Bearer ' + token,

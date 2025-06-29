@@ -52,6 +52,8 @@ class Biaya_operasionalController extends Controller
             'total_vendor'    => 'nullable|numeric',
             'total_paket'     => 'nullable|numeric',
             'biaya_lainnya' => 'nullable|array',
+            'biaya_lainnya.*.kegiatan' => 'required_with:biaya_lainnya|string',
+            'biaya_lainnya.*.biaya' => 'required_with:biaya_lainnya|numeric',
             'created_by'      => 'required|exists:users,id',
         ]);
 
@@ -82,6 +84,8 @@ class Biaya_operasionalController extends Controller
             'total_vendor'    => 'nullable|numeric',
             'total_paket'     => 'nullable|numeric',
             'biaya_lainnya' => 'nullable|array',
+            'biaya_lainnya.*.kegiatan' => 'required_with:biaya_lainnya|string',
+            'biaya_lainnya.*.biaya' => 'required_with:biaya_lainnya|numeric',
             'created_by'      => 'required|exists:users,id',
         ]);
 
