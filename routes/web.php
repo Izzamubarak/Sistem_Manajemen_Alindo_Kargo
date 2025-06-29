@@ -90,22 +90,6 @@ Route::get('/vendor/edit/{id}', function ($id) {
 
 Route::post('/logout', function () {
     Auth::logout();
-    request()->session()->invalidate();
-    request()->session()->regenerateToken(); // Tambahan keamanan
-
     return redirect('/login');
-})->middleware('auth')->name('logout');
+})->name('logout');
 
-Route::get('/seed-user', function () {
-    Artisan::call('db:seed');
-    return 'Seeder dijalankan!';
-});
-
-Route::get('/cek-user', function () {
-    return User::all();
-});
-
-Route::get('/run-migration', function () {
-    Artisan::call('migrate', ['--force' => true]);
-    return 'Migration done ✅';
-});
