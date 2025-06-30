@@ -32,8 +32,8 @@ class HomeController extends Controller
 
             $totalBiayaLain = 0;
             if (is_array($item->biaya_lainnya)) {
-                foreach ($item->biaya_lainnya as $biaya) {
-                    $totalBiayaLain += floatval($biaya);
+                foreach ($item->biaya_lainnya as $namaBiaya => $nilai) {
+                    $totalBiayaLain += floatval($nilai);
                 }
             }
 

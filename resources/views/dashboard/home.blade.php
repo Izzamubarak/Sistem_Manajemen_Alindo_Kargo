@@ -6,34 +6,51 @@
         <h2>Dashboard</h2>
 
         <div class="row">
-            <div class="col-md-4">
-                <div class="card text-white bg-success mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Total Pendapatan</h5>
-                        <p class="card-text">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</p>
-                        <a href="{{ route('biaya.index') }}" class="btn btn-light btn-sm mt-2">Lihat Detail</a>
-                    </div>
+    <div class="col-md-4">
+        <div class="card mb-4 shadow-sm border-0 text-white" style="background-color: #28a745;">
+            <div class="card-body d-flex align-items-center justify-content-between">
+                <div>
+                    <h6 class="mb-0">Total Pendapatan</h6>
+                    <h4 class="fw-bold">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</h4>
+                    <a href="{{ route('biaya.index') }}" class="btn btn-light btn-sm mt-2">Lihat Detail</a>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card text-white bg-danger mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Total Pengeluaran</h5>
-                        <p class="card-text">Rp {{ number_format($totalPengeluaran, 0, ',', '.') }}</p>
-                        <a href="{{ route('biaya.index') }}" class="btn btn-light btn-sm mt-2">Lihat Detail</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card text-white bg-primary mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Jumlah Paket Terkirim</h5>
-                        <p class="card-text">{{ $jumlahPaket }} Paket</p>
-                        <a href="{{ route('paket.index') }}" class="btn btn-light btn-sm mt-2">Lihat Detail</a>
-                    </div>
+                <div>
+                    <i class="bi bi-cash-stack fs-1 text-white-50"></i>
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card mb-4 shadow-sm border-0 text-white" style="background-color: #dc3545;">
+            <div class="card-body d-flex align-items-center justify-content-between">
+                <div>
+                    <h6 class="mb-0">Total Pengeluaran</h6>
+                    <h4 class="fw-bold">Rp {{ number_format($totalPengeluaran, 0, ',', '.') }}</h4>
+                    <a href="{{ route('biaya.index') }}" class="btn btn-light btn-sm mt-2">Lihat Detail</a>
+                </div>
+                <div>
+                    <i class="bi bi-credit-card-2-back fs-1 text-white-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card mb-4 shadow-sm border-0 text-white" style="background-color: #007bff;">
+            <div class="card-body d-flex align-items-center justify-content-between">
+                <div>
+                    <h6 class="mb-0">Jumlah Paket Terkirim</h6>
+                    <h4 class="fw-bold">{{ $jumlahPaket }} Paket</h4>
+                    <a href="{{ route('paket.index') }}" class="btn btn-light btn-sm mt-2">Lihat Detail</a>
+                </div>
+                <div>
+                    <i class="bi bi-box-seam fs-1 text-white-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
         <h4>Grafik Pesanan Per Bulan</h4>
         <canvas id="myAreaChart"></canvas>
