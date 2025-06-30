@@ -45,7 +45,7 @@ class HomeController extends Controller
 
         $jumlahPaket = $pakets->count();
 
-        return view('home', [
+        return view('pages.dashboard', [
             'totalPendapatan' => $totalPendapatan,
             'totalPengeluaran' => $totalPengeluaran,
             'jumlahPaket' => $jumlahPaket
