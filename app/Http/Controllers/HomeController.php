@@ -10,8 +10,8 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $pakets = Paket::where('status', 'Terkirim')->get();
-        $biayaList = BiayaOperasional::all();
+        $pakets = Data_paket::where('status', 'Terkirim')->get();
+        $biayaList = Biaya_operasional::all();
 
         $totalPendapatan = 0;
         $totalPengeluaran = 0;
@@ -27,7 +27,7 @@ class HomeController extends Controller
         }
 
         // Tambahkan ini:
-        $pesananBulanan = Paket::selectRaw('MONTH(tanggal_kirim) as bulan, COUNT(*) as total')
+        $pesananBulanan = Data_paket::selectRaw('MONTH(tanggal_kirim) as bulan, COUNT(*) as total')
             ->whereYear('tanggal_kirim', Carbon::now()->year)
             ->groupByRaw('MONTH(tanggal_kirim)')
             ->pluck('total', 'bulan')
