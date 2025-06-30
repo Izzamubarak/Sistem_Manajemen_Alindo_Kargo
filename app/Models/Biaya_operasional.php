@@ -18,6 +18,9 @@ class Biaya_operasional extends Model
         'created_by',
     ];
 
+    protected $casts = [
+        'biaya_lainnya' => 'array',
+    ];
 
     public function creator()
     {
