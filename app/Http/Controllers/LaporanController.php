@@ -32,7 +32,9 @@ class LaporanController extends Controller
             $biaya = $biayaMap[$paket->resi] ?? null;
 
             $paket->total_vendor = $biaya->total_vendor ?? 0;
-            $paket->biaya_lainnya = is_array($biaya->biaya_lainnya) ? collect($biaya->biaya_lainnya)->sum() : ($biaya->biaya_lainnya ?? 0);
+            $paket->biaya_lainnya = is_array($biaya->biaya_lainnya)
+                ? collect($biaya->biaya_lainnya)->sum('biaya')
+                : ($biaya->biaya_lainnya ?? 0);
             $paket->pengeluaran = $paket->total_vendor + $paket->biaya_lainnya;
             $paket->pendapatan = $paket->cost - $paket->pengeluaran;
 
