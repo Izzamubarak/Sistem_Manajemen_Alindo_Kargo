@@ -10,45 +10,34 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $bulanIni = Carbon::now()->month;
-        $tahunIni = Carbon::now()->year;
+        $pakets = Paket::where('status', 'Terkirim')->get();
+        $biayaList = BiayaOperasional::all();
 
-        $pakets = Data_paket::with('vendors')
-            ->where('status', 'Terkirim')
-            ->whereMonth('created_at', $bulanIni)
-            ->whereYear('created_at', $tahunIni)
-            ->get();
-
-        $resis = $pakets->pluck('resi');
-        $biayas = Biaya_operasional::whereIn('resi', $resis)->get()->keyBy('resi');
-
-        $totalPengeluaran = 0;
         $totalPendapatan = 0;
+        $totalPengeluaran = 0;
 
         foreach ($pakets as $paket) {
-            $vendorCost = $paket->vendors->sum('pivot.biaya_vendor') ?? 0;
-            $biayaLainnya = 0;
+            $biaya = $biayaList->where('resi', $paket->resi)->first();
+            $totalVendor = $biaya->total_vendor ?? 0;
+            $biayaLainnya = is_array($biaya->biaya_lainnya) ? collect($biaya->biaya_lainnya)->sum('nominal') : 0;
+            $pengeluaran = $totalVendor + $biayaLainnya;
 
-            if (isset($biayas[$paket->resi])) {
-                $biayaData = $biayas[$paket->resi]->biaya_lainnya;
-                if (is_array($biayaData)) {
-                    $biayaLainnya = collect($biayaData)->sum('biaya');
-                }
-            }
-
-            $pengeluaran = $vendorCost + $biayaLainnya;
+            $totalPendapatan += $paket->cost;
             $totalPengeluaran += $pengeluaran;
-
-            $pendapatan = $paket->cost - $pengeluaran;
-            $totalPendapatan += $pendapatan;
         }
 
-        $jumlahPaket = $pakets->count();
+        // Tambahkan ini:
+        $pesananBulanan = Paket::selectRaw('MONTH(tanggal_kirim) as bulan, COUNT(*) as total')
+            ->whereYear('tanggal_kirim', Carbon::now()->year)
+            ->groupByRaw('MONTH(tanggal_kirim)')
+            ->pluck('total', 'bulan')
+            ->toArray();
 
         return view('dashboard.home', [
             'totalPendapatan' => $totalPendapatan,
             'totalPengeluaran' => $totalPengeluaran,
-            'jumlahPaket' => $jumlahPaket
+            'jumlahPaket' => $pakets->count(),
+            'pesananBulanan' => $pesananBulanan, // ✅ kirim ke view
         ]);
     }
 }
