@@ -10,27 +10,23 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $pakets = Data_paket::where('status', 'Terkirim')->get();
-        $biayaList = Biaya_operasional::all();
+        $totalPendapatan = Biaya_operasional::where('jenis_biaya', 'Pendapatan')->sum('nominal');
 
-        $totalPendapatan = 0;
         $totalPengeluaran = 0;
-
-        foreach ($pakets as $paket) {
-            $biaya = $biayaList->where('resi', $paket->resi)->first();
+        $biayaList = Biaya_operasional::where('jenis_biaya', 'Pengeluaran')->get();
+        foreach ($biayaList as $biaya) {
             $totalVendor = $biaya->total_vendor ?? 0;
             $biayaLainnya = is_array($biaya->biaya_lainnya) ? collect($biaya->biaya_lainnya)->sum('nominal') : 0;
-            $pengeluaran = $totalVendor + $biayaLainnya;
-
-            $totalPendapatan += $paket->cost;
-            $totalPengeluaran += $pengeluaran;
+            $totalPengeluaran += $totalVendor + $biayaLainnya;
         }
 
-        // Tambahkan ini:
+        $pakets = Data_paket::where('status', 'Terkirim')->get();
+
         $pesananBulanan = Data_paket::selectRaw('MONTH(created_at) as bulan, COUNT(*) as total')
             ->whereYear('created_at', Carbon::now()->year)
             ->groupByRaw('MONTH(created_at)')
-            ->pluck('total', 'bulan')->toArray();
+            ->pluck('total', 'bulan')
+            ->toArray();
 
         $kotaTujuan = Data_paket::selectRaw('kota_tujuan, COUNT(*) as total')
             ->groupBy('kota_tujuan')
@@ -42,7 +38,7 @@ class HomeController extends Controller
             'totalPengeluaran' => $totalPengeluaran,
             'jumlahPaket' => $pakets->count(),
             'pesananBulanan' => $pesananBulanan,
-            'kotaTujuan' => $kotaTujuan,
+            'kotaTujuan' => $kotaTujuan
         ]);
     }
 }

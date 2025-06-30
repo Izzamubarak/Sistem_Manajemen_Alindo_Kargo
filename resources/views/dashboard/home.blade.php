@@ -11,6 +11,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Total Pendapatan</h5>
                         <p class="card-text">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</p>
+                        <a href="{{ route('biaya.index') }}" class="btn btn-light btn-sm mt-2">Lihat Detail</a>
                     </div>
                 </div>
             </div>
@@ -19,6 +20,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Total Pengeluaran</h5>
                         <p class="card-text">Rp {{ number_format($totalPengeluaran, 0, ',', '.') }}</p>
+                        <a href="{{ route('biaya.index') }}" class="btn btn-light btn-sm mt-2">Lihat Detail</a>
                     </div>
                 </div>
             </div>
@@ -27,11 +29,11 @@
                     <div class="card-body">
                         <h5 class="card-title">Jumlah Paket Terkirim</h5>
                         <p class="card-text">{{ $jumlahPaket }} Paket</p>
+                        <a href="{{ route('paket.index') }}" class="btn btn-light btn-sm mt-2">Lihat Detail</a>
                     </div>
                 </div>
             </div>
         </div>
-
 
         <h4>Grafik Pesanan Per Bulan</h4>
         <canvas id="myAreaChart"></canvas>
@@ -42,7 +44,6 @@
 
     @php
         use Carbon\Carbon;
-
         $bulanKeys = array_keys($pesananBulanan);
         $bulanLabel = [];
 
