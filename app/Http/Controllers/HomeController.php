@@ -27,17 +27,22 @@ class HomeController extends Controller
         }
 
         // Tambahkan ini:
-        $pesananBulanan = Data_paket::selectRaw('MONTH(tanggal_kirim) as bulan, COUNT(*) as total')
-            ->whereYear('tanggal_kirim', Carbon::now()->year)
-            ->groupByRaw('MONTH(tanggal_kirim)')
-            ->pluck('total', 'bulan')
+        $pesananBulanan = Data_paket::selectRaw('MONTH(created_at) as bulan, COUNT(*) as total')
+            ->whereYear('created_at', Carbon::now()->year)
+            ->groupByRaw('MONTH(created_at)')
+            ->pluck('total', 'bulan')->toArray();
+
+        $kotaTujuan = Data_paket::selectRaw('kota_tujuan, COUNT(*) as total')
+            ->groupBy('kota_tujuan')
+            ->pluck('total', 'kota_tujuan')
             ->toArray();
 
         return view('dashboard.home', [
             'totalPendapatan' => $totalPendapatan,
             'totalPengeluaran' => $totalPengeluaran,
             'jumlahPaket' => $pakets->count(),
-            'pesananBulanan' => $pesananBulanan, // ✅ kirim ke view
+            'pesananBulanan' => $pesananBulanan,
+            'kotaTujuan' => $kotaTujuan,
         ]);
     }
 }
