@@ -74,16 +74,16 @@
                         let biayaLainnyaText = "-";
 
                         // Jika biaya_lainnya adalah object JSON, loop untuk tampilkan
-                        if (item.biaya_lainnya && typeof item.biaya_lainnya === 'object') {
-                            const entries = Object.entries(item.biaya_lainnya).map(
-                                ([kegiatan, nominal]) => {
-                                    const nilai = parseFloat(nominal || 0);
-                                    biayaLainnya += nilai;
-                                    return `${kegiatan}: Rp${nilai.toLocaleString()}`;
-                                }
-                            );
+                        if (Array.isArray(item.biaya_lainnya)) {
+                            const entries = item.biaya_lainnya.map(entry => {
+                                const kegiatan = entry.kegiatan || '-';
+                                const biaya = parseFloat(entry.biaya) || 0;
+                                biayaLainnya += biaya;
+                                return `${kegiatan}: Rp${biaya.toLocaleString()}`;
+                            });
                             biayaLainnyaText = entries.join("<br>");
                         }
+
 
                         // Total pengeluaran
                         const pengeluaran = totalVendor + biayaLainnya;
