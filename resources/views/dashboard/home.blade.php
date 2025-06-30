@@ -14,13 +14,11 @@
                             <h6 class="card-title">Total Pendapatan</h6>
                             <h4 class="card-text">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</h4>
                         </div>
-                        @if ($userRole === 'super-admin')
-                            <div class="card-footer bg-transparent border-0">
-                                <a href="{{ route('biaya.index') }}" class="btn btn-sm btn-light">Lihat Detail</a>
-                            </div>
-                        @endif
+                        <div class="card-footer bg-transparent border-0">
+                            <a href="{{ route('biaya.index') }}" class="btn btn-sm btn-light">Lihat Detail</a>
+                        </div>
                     </div>
-                </div>>
+                </div>
 
                 <!-- Card Pengeluaran -->
                 <div class="col-md-4 mb-3">
@@ -29,11 +27,9 @@
                             <h6 class="card-title">Total Pengeluaran</h6>
                             <h4 class="card-text">Rp {{ number_format($totalPengeluaran, 0, ',', '.') }}</h4>
                         </div>
-                        @if ($userRole === 'super-admin')
-                            <div class="card-footer bg-transparent border-0">
-                                <a href="{{ route('biaya.index') }}" class="btn btn-sm btn-light">Lihat Detail</a>
-                            </div>
-                        @endif
+                        <div class="card-footer bg-transparent border-0">
+                            <a href="{{ route('biaya.index') }}" class="btn btn-sm btn-light">Lihat Detail</a>
+                        </div>
                     </div>
                 </div>
 
@@ -44,11 +40,9 @@
                             <h6 class="card-title">Jumlah Paket Terkirim</h6>
                             <h4 class="card-text">{{ $jumlahPaket }} Paket</h4>
                         </div>
-                        @if ($userRole === 'super-admin')
-                            <div class="card-footer bg-transparent border-0">
-                                <a href="{{ route('paket.index') }}" class="btn btn-sm btn-light">Lihat Detail</a>
-                            </div>
-                        @endif
+                        <div class="card-footer bg-transparent border-0">
+                            <a href="{{ route('paket.index') }}" class="btn btn-sm btn-light">Lihat Detail</a>
+                        </div>
                     </div>
                 </div>
 
