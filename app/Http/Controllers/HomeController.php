@@ -10,17 +10,41 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $totalPendapatan = Biaya_operasional::where('jenis_biaya', 'Pendapatan')->sum('nominal');
+        $biayas = Biaya_operasional::all();
+        $resis = $biayas->pluck('resi')->filter();
+        $pakets = Data_paket::with('vendors')->whereIn('resi', $resis)->get()->keyBy('resi');
 
+        $totalPendapatan = 0;
         $totalPengeluaran = 0;
-        $biayaList = Biaya_operasional::where('jenis_biaya', 'Pengeluaran')->get();
-        foreach ($biayaList as $biaya) {
-            $totalVendor = $biaya->total_vendor ?? 0;
-            $biayaLainnya = is_array($biaya->biaya_lainnya) ? collect($biaya->biaya_lainnya)->sum('nominal') : 0;
-            $totalPengeluaran += $totalVendor + $biayaLainnya;
+
+        foreach ($biayas as $item) {
+            $total_vendor = 0;
+            $total_paket = 0;
+
+            $paket = $pakets[$item->resi] ?? null;
+            if ($paket) {
+                $total_vendor = $paket->vendors->sum(function ($vendor) {
+                    return $vendor->pivot->biaya_vendor ?? 0;
+                });
+
+                $total_paket = $paket->cost ?? 0;
+            }
+
+            $totalBiayaLain = 0;
+            if (is_array($item->biaya_lainnya)) {
+                foreach ($item->biaya_lainnya as $biaya) {
+                    $totalBiayaLain += floatval($biaya);
+                }
+            }
+
+            $pengeluaran = $total_vendor + $totalBiayaLain;
+            $pendapatan = $total_paket - $pengeluaran;
+
+            $totalPengeluaran += $pengeluaran;
+            $totalPendapatan += $pendapatan;
         }
 
-        $pakets = Data_paket::where('status', 'Terkirim')->get();
+        $paketsTerkirim = Data_paket::where('status', 'Terkirim')->get();
 
         $pesananBulanan = Data_paket::selectRaw('MONTH(created_at) as bulan, COUNT(*) as total')
             ->whereYear('created_at', Carbon::now()->year)
@@ -36,7 +60,7 @@ class HomeController extends Controller
         return view('dashboard.home', [
             'totalPendapatan' => $totalPendapatan,
             'totalPengeluaran' => $totalPengeluaran,
-            'jumlahPaket' => $pakets->count(),
+            'jumlahPaket' => $paketsTerkirim->count(),
             'pesananBulanan' => $pesananBulanan,
             'kotaTujuan' => $kotaTujuan
         ]);
