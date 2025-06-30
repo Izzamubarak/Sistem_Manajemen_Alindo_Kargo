@@ -62,7 +62,7 @@ class HomeController extends Controller
             ->pluck('total', 'kota_tujuan')
             ->toArray();
 
-        $userRole = Auth::user()->role;
+        $userRole = optional(Auth::user())->role;
 
         return view('dashboard.home', [
             'totalPendapatan'   => $totalPendapatan,
