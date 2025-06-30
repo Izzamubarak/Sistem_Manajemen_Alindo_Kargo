@@ -5,30 +5,33 @@
     <div class="container">
         <h2>Dashboard</h2>
 
-        <div class="row mb-4">
-            <div class="col-md-6">
-                <div class="card bg-success text-white">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card text-white bg-success mb-3">
                     <div class="card-body">
-                        <h5>Total Pendapatan</h5>
-                        <h3>Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</h3>
-                    </div>
-                    <div class="card-footer">
-                        <a href="{{ url('/biaya') }}" class="text-white">Lihat Detail</a>
+                        <h5 class="card-title">Total Pendapatan</h5>
+                        <p class="card-text">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</p>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="card bg-primary text-white">
+            <div class="col-md-4">
+                <div class="card text-white bg-danger mb-3">
                     <div class="card-body">
-                        <h5>Jumlah Paket Terkirim</h5>
-                        <h3>{{ $jumlahPaket }} Paket</h3>
+                        <h5 class="card-title">Total Pengeluaran</h5>
+                        <p class="card-text">Rp {{ number_format($totalPengeluaran, 0, ',', '.') }}</p>
                     </div>
-                    <div class="card-footer">
-                        <a href="{{ url('/paket') }}" class="text-white">Lihat Detail</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-white bg-primary mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Jumlah Paket Terkirim</h5>
+                        <p class="card-text">{{ $jumlahPaket }} Paket</p>
                     </div>
                 </div>
             </div>
         </div>
+
 
         <h4>Grafik Pesanan Per Bulan</h4>
         <canvas id="myAreaChart"></canvas>
