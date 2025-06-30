@@ -39,8 +39,15 @@ class HomeController extends Controller
             // Biaya lainnya dijumlahkan dari setiap nilai
             $totalBiayaLain = 0;
             if (is_array($item->biaya_lainnya)) {
-                foreach ($item->biaya_lainnya as $namaBiaya => $nilai) {
-                    $totalBiayaLain += floatval($nilai);
+                foreach ($item->biaya_lainnya as $biaya) {
+                    // Kalau item adalah array dengan key "biaya"
+                    if (is_array($biaya) && isset($biaya['biaya'])) {
+                        $totalBiayaLain += floatval($biaya['biaya']);
+                    }
+                    // Atau kalau item langsung berupa angka (fallback lama)
+                    elseif (is_numeric($biaya)) {
+                        $totalBiayaLain += floatval($biaya);
+                    }
                 }
             }
 
