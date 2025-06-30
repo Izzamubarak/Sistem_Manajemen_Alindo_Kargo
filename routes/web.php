@@ -3,7 +3,6 @@
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-// use App\Http\Controllers\PaketExportController;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
@@ -93,3 +92,7 @@ Route::post('/logout', function () {
     return redirect('/login');
 })->name('logout');
 
+Route::get('/run-migrate', function () {
+    Artisan::call('migrate', ['--force' => true]);
+    return 'Migrasi berhasil dijalankan!';
+});
