@@ -18,25 +18,36 @@ class Biaya_operasionalController extends Controller
             $item->vendor_names = [];
             $item->total_vendor = 0;
             $item->total_paket = 0;
+            $item->total_pengeluaran = 0;
+            $item->pendapatan = 0;
 
             $paket = $pakets[$item->resi] ?? null;
+
             if ($paket) {
-                // Ambil nama vendor
                 $item->vendor_names = $paket->vendors->pluck('name')->toArray();
 
-                // Total biaya vendor (dari pivot table)
+                // Hitung total biaya vendor dari pivot
                 $item->total_vendor = $paket->vendors->sum(function ($vendor) {
                     return $vendor->pivot->biaya_vendor ?? 0;
                 });
 
-                // Biaya paket langsung dari kolom cost
+                // Biaya kirim asli dari kolom cost
                 $item->total_paket = $paket->cost ?? 0;
             }
 
-            $item->total_keseluruhan =
-                ($item->total_vendor ?? 0) +
-                ($item->total_paket ?? 0) +
-                ($item->biaya_lainnya ?? 0);
+            // Hitung biaya lainnya
+            $totalBiayaLain = 0;
+            if (is_array($item->biaya_lainnya)) {
+                foreach ($item->biaya_lainnya as $biaya) {
+                    $totalBiayaLain += floatval($biaya);
+                }
+            }
+
+            // Pengeluaran = vendor + biaya lainnya
+            $item->total_pengeluaran = $item->total_vendor + $totalBiayaLain;
+
+            // Pendapatan = biaya kirim paket - pengeluaran
+            $item->pendapatan = $item->total_paket - $item->total_pengeluaran;
 
             return $item;
         });
@@ -44,16 +55,13 @@ class Biaya_operasionalController extends Controller
         return response()->json($data);
     }
 
-
     public function store(Request $request)
     {
         $validated = $request->validate([
             'resi'            => 'nullable|string|max:255',
             'total_vendor'    => 'nullable|numeric',
             'total_paket'     => 'nullable|numeric',
-            'biaya_lainnya' => 'nullable|array',
-            'biaya_lainnya.*.kegiatan' => 'required_with:biaya_lainnya|string',
-            'biaya_lainnya.*.biaya' => 'required_with:biaya_lainnya|numeric',
+            'biaya_lainnya'   => 'nullable|array',
             'created_by'      => 'required|exists:users,id',
         ]);
 
@@ -64,13 +72,33 @@ class Biaya_operasionalController extends Controller
     public function show($id)
     {
         $item = Biaya_operasional::findOrFail($id);
-        $item->total_keseluruhan = ($item->total_vendor ?? 0) + ($item->total_paket ?? 0) + ($item->biaya_lainnya ?? 0);
         $item->vendor_names = [];
+        $item->total_vendor = 0;
+        $item->total_paket = 0;
+        $item->total_pengeluaran = 0;
+        $item->pendapatan = 0;
 
         $paket = Data_paket::with('vendors')->where('resi', $item->resi)->first();
+
         if ($paket && $paket->vendors) {
             $item->vendor_names = $paket->vendors->pluck('name')->toArray();
+
+            $item->total_vendor = $paket->vendors->sum(function ($vendor) {
+                return $vendor->pivot->biaya_vendor ?? 0;
+            });
+
+            $item->total_paket = $paket->cost ?? 0;
         }
+
+        $totalBiayaLain = 0;
+        if (is_array($item->biaya_lainnya)) {
+            foreach ($item->biaya_lainnya as $biaya) {
+                $totalBiayaLain += floatval($biaya);
+            }
+        }
+
+        $item->total_pengeluaran = $item->total_vendor + $totalBiayaLain;
+        $item->pendapatan = $item->total_paket - $item->total_pengeluaran;
 
         return response()->json($item);
     }
@@ -83,16 +111,14 @@ class Biaya_operasionalController extends Controller
             'resi'            => 'nullable|string|max:255',
             'total_vendor'    => 'nullable|numeric',
             'total_paket'     => 'nullable|numeric',
-            'biaya_lainnya' => 'nullable|array',
-            'biaya_lainnya.*.kegiatan' => 'required_with:biaya_lainnya|string',
-            'biaya_lainnya.*.biaya' => 'required_with:biaya_lainnya|numeric',
+            'biaya_lainnya'   => 'nullable|array',
             'created_by'      => 'required|exists:users,id',
         ]);
 
         $biaya->update($validated);
 
-        // Update otomatis status jadi 'Terkirim' jika biaya_lainnya > 0
-        if (!empty($validated['biaya_lainnya']) && $validated['biaya_lainnya'] > 0) {
+        // Update status paket menjadi "Terkirim" jika biaya lainnya terisi
+        if (!empty($validated['biaya_lainnya'])) {
             $paket = Data_paket::where('resi', $biaya->resi)->first();
             if ($paket) {
                 $paket->status = 'Terkirim';
@@ -102,7 +128,6 @@ class Biaya_operasionalController extends Controller
 
         return response()->json($biaya);
     }
-
 
     public function destroy($id)
     {

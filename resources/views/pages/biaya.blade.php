@@ -57,7 +57,9 @@
                     }
                 });
 
-                const data = await resData.json();
+                const resJson = await resData.json();
+                const data = Array.isArray(resJson) ? resJson : resJson.data;
+
                 tbody.innerHTML = '';
 
                 if (data.length === 0) {
@@ -71,22 +73,24 @@
                         let biayaLainnya = 0;
                         let biayaLainnyaText = "-";
 
+                        // Jika biaya_lainnya adalah object JSON, loop untuk tampilkan
                         if (item.biaya_lainnya && typeof item.biaya_lainnya === 'object') {
                             const entries = Object.entries(item.biaya_lainnya).map(
-                                ([keg, nominal]) => {
-                                    biayaLainnya += parseFloat(nominal) || 0;
-                                    return `${keg}: Rp${(nominal || 0).toLocaleString()}`;
+                                ([kegiatan, nominal]) => {
+                                    const nilai = parseFloat(nominal || 0);
+                                    biayaLainnya += nilai;
+                                    return `${kegiatan}: Rp${nilai.toLocaleString()}`;
                                 }
                             );
                             biayaLainnyaText = entries.join("<br>");
                         }
 
+                        // Total pengeluaran
                         const pengeluaran = totalVendor + biayaLainnya;
-                        const pendapatan = totalPaket;
-
+                        const pendapatan = totalPaket - pengeluaran;
 
                         tbody.innerHTML += `
-                         <tr>
+                        <tr>
                             <td>${index + 1}</td>
                             <td>${item.resi ?? '-'}</td>
                             <td>${vendorList || '-'}</td>
@@ -99,7 +103,7 @@
                                 <button class="btn btn-sm btn-danger" onclick="hapusBiaya(${item.id})">Hapus</button>
                             </td>
                         </tr>
-                        `;
+                    `;
                     });
                 }
 
@@ -125,7 +129,7 @@
                 alert("Data berhasil dihapus");
                 location.reload();
             } else {
-                alert("Gagal menghapus data"); 
+                alert("Gagal menghapus data");
             }
         }
     </script>

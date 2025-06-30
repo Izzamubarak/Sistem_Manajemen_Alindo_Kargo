@@ -59,10 +59,12 @@
                         <td>{{ $paket->vendors->pluck('name')->implode(', ') ?: '-' }}</td>
                         <td>{{ $paket->creator->name ?? '-' }}</td>
                         @php
-                            $biayaVendor = $paket->vendors->sum('pivot.biaya_vendor') ?? 0;
-                            $biayaLainnya = is_array($paket->biaya_lainnya) ? array_sum($paket->biaya_lainnya) : 0;
+                            $biayaVendor = $paket->total_vendor ?? $paket->vendors->sum('pivot.biaya_vendor');
+                            $biayaLainnya = is_array($paket->biaya_lainnya)
+                                ? array_sum($paket->biaya_lainnya)
+                                : $paket->biaya_lainnya ?? 0;
                             $pengeluaran = $biayaVendor + $biayaLainnya;
-                            $pendapatan = $paket->cost ?? 0;
+                            $pendapatan = ($paket->cost ?? 0) - $pengeluaran;
                         @endphp
                         <td>Rp {{ number_format($pengeluaran, 0, ',', '.') }}</td>
                         <td>Rp {{ number_format($pendapatan, 0, ',', '.') }}</td>
