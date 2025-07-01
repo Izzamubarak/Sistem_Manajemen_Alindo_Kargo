@@ -7,42 +7,43 @@
         <div class="container mt-4">
             <div class="row">
 
-                <!-- Card Pendapatan -->
                 <div class="col-md-4 mb-3">
-                    <div class="card text-white bg-success h-100 shadow">
+                    <div class="card bg-success text-white h-100 shadow-sm">
                         <div class="card-body">
-                            <h6 class="card-title">Total Pendapatan</h6>
-                            <h4 class="card-text">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</h4>
+                            <h5 class="card-title">Total Pendapatan</h5>
+                            <p class="card-text">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</p>
                         </div>
                         <div class="card-footer bg-transparent border-0">
-                            <a href="{{ route('biaya.index') }}" class="btn btn-sm btn-light">Lihat Detail</a>
+                            <a href="{{ route('biaya.index') }}" class="btn btn-success btn-sm shadow-sm"
+                                style="background-color: #218838; border-color: #1e7e34;">Lihat Detail</a>
                         </div>
                     </div>
                 </div>
 
-                <!-- Card Pengeluaran -->
                 <div class="col-md-4 mb-3">
-                    <div class="card text-white bg-danger h-100 shadow">
+                    <div class="card bg-danger text-white h-100 shadow-sm">
                         <div class="card-body">
-                            <h6 class="card-title">Total Pengeluaran</h6>
-                            <h4 class="card-text">Rp {{ number_format($totalPengeluaran, 0, ',', '.') }}</h4>
+                            <h5 class="card-title">Total Pengeluaran</h5>
+                            <p class="card-text">Rp {{ number_format($totalPengeluaran, 0, ',', '.') }}</p>
                         </div>
                         <div class="card-footer bg-transparent border-0">
-                            <a href="{{ route('biaya.index') }}" class="btn btn-sm btn-light">Lihat Detail</a>
+                            <a href="{{ route('biaya.index') }}" class="btn btn-danger btn-sm shadow-sm"
+                                style="background-color: #c82333; border-color: #bd2130;">Lihat Detail</a>
                         </div>
                     </div>
                 </div>
 
-                <!-- Card Jumlah Paket -->
                 <div class="col-md-4 mb-3">
-                    <div class="card text-white bg-primary h-100 shadow">
+                    <div class="card bg-primary text-white h-100 shadow-sm">
                         <div class="card-body">
-                            <h6 class="card-title">Jumlah Paket Terkirim</h6>
-                            <h4 class="card-text">{{ $jumlahPaket }} Paket</h4>
+                            <h5 class="card-title">Jumlah Paket Terkirim</h5>
+                            <p class="card-text">{{ $jumlahPaket }} Paket</p>
                         </div>
                         <div class="card-footer bg-transparent border-0">
-                            <a href="{{ route('paket.index') }}" class="btn btn-sm btn-light">Lihat Detail</a>
+                            <a href="{{ route('paket.index') }}" class="btn btn-primary btn-sm shadow-sm"
+                                style="background-color: #0069d9; border-color: #0062cc;">Lihat Detail</a>
                         </div>
+                        
                     </div>
                 </div>
 

@@ -100,7 +100,6 @@
                             <td>Rp${pendapatan.toLocaleString()}</td>
                             <td>
                                 <a href="/biaya/edit/${item.id}" class="btn btn-sm btn-warning">Edit</a>
-                                <button class="btn btn-sm btn-danger" onclick="hapusBiaya(${item.id})">Hapus</button>
                             </td>
                         </tr>
                     `;
@@ -112,25 +111,5 @@
                     `<tr><td colspan="8" class="text-danger text-center">Error: ${error.message}</td></tr>`;
             }
         });
-
-        async function hapusBiaya(id) {
-            if (!confirm("Yakin ingin menghapus data ini?")) return;
-            const token = localStorage.getItem('token');
-
-            const res = await fetch(`/api/biaya/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Accept': 'application/json'
-                }
-            });
-
-            if (res.ok) {
-                alert("Data berhasil dihapus");
-                location.reload();
-            } else {
-                alert("Gagal menghapus data");
-            }
-        }
     </script>
 @endsection
