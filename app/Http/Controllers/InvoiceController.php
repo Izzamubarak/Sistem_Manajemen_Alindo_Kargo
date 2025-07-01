@@ -67,7 +67,7 @@ class InvoiceController extends Controller
     public function download(Request $request)
     {
         if ($request->has('package_id')) {
-            $paket = Data_paket::with('vendors')->findOrFail($request->package_id);
+            $paket = Data_paket::with('vendors', 'creator')->findOrFail($request->package_id);
 
             $data = [
                 'resi' => $paket->resi,
@@ -83,6 +83,7 @@ class InvoiceController extends Controller
                 'volume' => $paket->volume,
                 'cost' => $paket->cost,
                 'created_by' => $paket->created_by,
+                'nama_pengirim' => $paket->creator->name ?? '-',
                 'vendors' => $paket->vendors,
             ];
         } else {
@@ -165,7 +166,7 @@ class InvoiceController extends Controller
             [ ] Port to Port  [ ] Door to Door
         </td>
         <td><strong>Pengirim:</strong></td>
-        <td>User ID ' . ($data["created_by"] ?? '-') . '</td>
+        <td>' . ($data['nama_pengirim'] ?? '-') . '</td>
     </tr>
     <tr>
         <td><strong>Kota Asal:</strong></td>
