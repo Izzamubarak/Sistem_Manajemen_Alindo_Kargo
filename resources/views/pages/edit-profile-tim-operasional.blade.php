@@ -32,68 +32,64 @@
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             const token = localStorage.getItem("token");
+            const path = window.location.pathname;
 
-            try {
-                const res = await fetch(
-                    '/api/profile/{{ request()->segment(2) === 'admin' ? 'admin' : 'tim-operasional' }}', {
-                        headers: {
-                            "Authorization": "Bearer " + token,
-                            "Accept": "application/json",
-                        },
-                    });
+            // Ambil "admin" atau "tim-operasional" dari URL
+            const role = path.includes("admin") ? "admin" : "tim-operasional";
 
-                const result = await res.json();
+            // Ambil data user
+            const res = await fetch(`/api/profile/${role}`, {
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    "Accept": "application/json",
+                },
+            });
 
-                if (!res.ok || !result.data) {
-                    alert("Gagal mengambil data profil. Mungkin token tidak valid atau data tidak ditemukan.");
-                    console.error(result);
-                    return;
+            const result = await res.json();
+
+            if (!res.ok) {
+                alert("Gagal mengambil data profil. Mungkin token tidak valid.");
+                return;
+            }
+
+            const user = result.data ?? result;
+
+            document.querySelector('[name="name"]').value = user.name ?? '';
+            document.querySelector('[name="username"]').value = user.username ?? '';
+            document.querySelector('[name="email"]').value = user.email ?? '';
+
+            // Saat submit form
+            document.getElementById("editForm").addEventListener("submit", async function(e) {
+                e.preventDefault();
+
+                const formData = {
+                    name: this.name.value,
+                    username: this.username.value,
+                    email: this.email.value,
+                };
+
+                if (this.password.value) {
+                    formData.password = this.password.value;
                 }
 
-                const user = result.data;
-
-                document.querySelector('[name="name"]').value = user.name ?? '';
-                document.querySelector('[name="username"]').value = user.username ?? '';
-                document.querySelector('[name="email"]').value = user.email ?? '';
-
-                document.getElementById("editForm").addEventListener("submit", async function(e) {
-                    e.preventDefault();
-
-                    const formData = {
-                        name: this.name.value,
-                        username: this.username.value,
-                        email: this.email.value,
-                    };
-
-                    if (this.password.value) {
-                        formData.password = this.password.value;
-                    }
-
-                    const updateRes = await fetch(
-                        '/api/profile/{{ request()->segment(2) === 'admin' ? 'admin' : 'tim-operasional' }}', {
-                            method: "PUT",
-                            headers: {
-                                "Authorization": "Bearer " + token,
-                                "Accept": "application/json",
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify(formData)
-                        });
-
-                    if (updateRes.ok) {
-                        alert("Profil berhasil diperbarui!");
-                        window.location.href = "/profile-{{ Request::segment(2) }}";
-                    } else {
-                        alert("Gagal update profil.");
-                        const error = await updateRes.json();
-                        console.error(error);
-                    }
+                const updateRes = await fetch(`/api/profile/${role}`, {
+                    method: "PUT",
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        "Accept": "application/json",
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(formData)
                 });
 
-            } catch (err) {
-                console.error("Error saat fetch profil:", err);
-                alert("Terjadi kesalahan jaringan.");
-            }
+                if (updateRes.ok) {
+                    alert("Profil berhasil diperbarui!");
+                    window.location.href = `/profile-${role}`;
+                } else {
+                    alert("Gagal update profil.");
+                }
+            });
         });
     </script>
+
 @endsection
