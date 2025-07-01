@@ -75,7 +75,7 @@
 <body>
     <div class="login-container">
         <div class="login-left">
-            <img src="{{ asset('images/logo-alindo.png') }}" alt="Logo Alindo">
+            <img src="{{ asset('images/logo1.png') }}" alt="Logo Alindo">
         </div>
         <div class="login-right">
             <h4 class="text-center">Selamat Datang</h4>
@@ -101,17 +101,18 @@
             const email = document.querySelector('input[name="username"]').value;
             const password = document.querySelector('input[name="password"]').value;
 
-            const response = await fetch('https://sistemmanajemenperusahaan-production-affb.up.railway.app/api/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({
-                    email: email,
-                    password: password
-                })
-            });
+            const response = await fetch(
+                'https://sistemmanajemenperusahaan-production-affb.up.railway.app/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                });
 
             const result = await response.json();
 

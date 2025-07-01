@@ -114,7 +114,6 @@
                     }
                 });
                 userData = await userRes.json();
-                console.log('User login:', userData);
 
                 const vendorRes = await fetch('/api/vendor', {
                     headers: {
