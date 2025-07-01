@@ -143,7 +143,7 @@ class InvoiceController extends Controller
 <table class="main-table">
     <tr>
         <td width="30%">
-            <img src="' . public_path('logo.png') . '" width="100" alt="Logo">
+            <img src="' . public_path('images/logo-alindo.png') . '" width="100" alt="Logo">
         </td>
         <td style="text-align:center;">
             <h2 style="margin:5px 0;">PT. ALIF LOGISTIK INDONESIA</h2>
