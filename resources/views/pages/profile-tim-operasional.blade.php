@@ -57,11 +57,11 @@
                         <td>${user.email}</td>
                         <td>${new Date(user.created_at).toLocaleDateString()}</td>
                         <td>
-     <a href="/profile-tim-profesional/edit/${user.id}" class="btn btn-sm btn-warning">Edit</a>
-    <button class="btn btn-sm btn-danger" onclick="hapusUser(${user.id})">Hapus</button>
-</td>
-
+                            <a href="/profile-tim-operasional/edit/${user.id}" class="btn btn-sm btn-warning">Edit</a>
+                            <button class="btn btn-sm btn-danger" onclick="hapusUser(${user.id})">Hapus</button>
+                        </td>       
                     </tr>
+                    // perubahan pada href="/profile-tim-operasional/edit/
                 `;
                     });
                 }
