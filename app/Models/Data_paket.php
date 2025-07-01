@@ -58,7 +58,7 @@ class Data_paket extends Model
         parent::boot();
 
         static::deleting(function ($paket) {
-            $paket->biayaOperasional()?->delete();
+            $paket->Biaya_operasional()?->delete();
         });
     }
 }
