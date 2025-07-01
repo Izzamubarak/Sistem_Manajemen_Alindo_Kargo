@@ -32,12 +32,9 @@
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             const token = localStorage.getItem("token");
-            const path = window.location.pathname;
+            const role = "admin"; // karena halaman ini khusus admin
 
-            // Ambil "admin" atau "tim-operasional" dari URL
-            const role = path.includes("admin") ? "admin" : "tim-operasional";
-
-            // Ambil data user
+            // Ambil data admin
             const res = await fetch(`/api/profile/${role}`, {
                 headers: {
                     "Authorization": "Bearer " + token,
@@ -54,11 +51,12 @@
 
             const user = result.data ?? result;
 
+            // Isi form
             document.querySelector('[name="name"]').value = user.name ?? '';
             document.querySelector('[name="username"]').value = user.username ?? '';
             document.querySelector('[name="email"]').value = user.email ?? '';
 
-            // Saat submit form
+            // Submit form
             document.getElementById("editForm").addEventListener("submit", async function(e) {
                 e.preventDefault();
 
@@ -91,5 +89,6 @@
             });
         });
     </script>
+
 
 @endsection

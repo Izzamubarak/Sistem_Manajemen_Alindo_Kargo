@@ -66,30 +66,34 @@ class UserController extends Controller
         return response()->json(null, 204);
     }
 
+    // ===================== //
+    //     TIM OPERASIONAL   //
+    // ===================== //
+
     public function showTim(Request $request)
     {
         $user = $request->user();
 
-        if (!in_array($user->role, ['tim-operasional', 'super-admin'])) {
+        if ($user->role !== 'super-admin') {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
-        return response()->json(['data' => $user]);
+        $admins = User::where('role', 'tim-operasional')->get();
+        return response()->json($admins);
     }
-
 
     public function updateTim(Request $request)
     {
-        $user = $request->user();
+        $admin = $request->user();
 
-        if (!in_array($user->role, ['tim-operasional', 'super-admin'])) {
+        if ($admin->role !== 'super-admin') {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
         $validated = $request->validate([
             'name'     => 'sometimes|string',
-            'username' => 'sometimes|string|unique:users,username,' . $user->id,
-            'email'    => 'sometimes|email|unique:users,email,' . $user->id,
+            'username' => 'sometimes|string|unique:users,username,' . $admin->id,
+            'email'    => 'sometimes|email|unique:users,email,' . $admin->id,
             'password' => 'sometimes|string|min:6',
         ]);
 
@@ -97,10 +101,9 @@ class UserController extends Controller
             $validated['password'] = Hash::make($validated['password']);
         }
 
-        $user->update($validated);
-        return response()->json($user);
+        $admin->update($validated);
+        return response()->json($admin);
     }
-
 
 
     public function destroyTim($id)
@@ -111,29 +114,34 @@ class UserController extends Controller
         return response()->json(null, 204);
     }
 
+    // ===================== //
+    //      PROFILE ADMIN    //
+    // ===================== //
+
     public function showAdmin(Request $request)
     {
         $user = $request->user();
 
-        if (!in_array($user->role, ['admin', 'super-admin'])) {
+        if ($user->role !== 'super-admin') {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
-        return response()->json(['data' => $user]);
+        $admins = User::where('role', 'admin')->get();
+        return response()->json($admins);
     }
 
     public function updateAdmin(Request $request)
     {
-        $user = $request->user();
+        $admin = $request->user();
 
-        if (!in_array($user->role, ['admin', 'super-admin'])) {
+        if ($admin->role !== 'super-admin') {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
         $validated = $request->validate([
             'name'     => 'sometimes|string',
-            'username' => 'sometimes|string|unique:users,username,' . $user->id,
-            'email'    => 'sometimes|email|unique:users,email,' . $user->id,
+            'username' => 'sometimes|string|unique:users,username,' . $admin->id,
+            'email'    => 'sometimes|email|unique:users,email,' . $admin->id,
             'password' => 'sometimes|string|min:6',
         ]);
 
@@ -141,10 +149,9 @@ class UserController extends Controller
             $validated['password'] = Hash::make($validated['password']);
         }
 
-        $user->update($validated);
-        return response()->json($user);
+        $admin->update($validated);
+        return response()->json($admin);
     }
-
 
 
     public function destroyAdmin($id)
