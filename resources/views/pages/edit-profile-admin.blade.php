@@ -33,57 +33,31 @@
         document.addEventListener('DOMContentLoaded', async () => {
             const token = localStorage.getItem("token");
 
-            const res = await fetch('/api/profile/admin', {
-                headers: {
-                    "Authorization": "Bearer " + token,
-                    "Accept": "application/json",
-                },
-            });
-
-            const result = await res.json();
-
-            if (!res.ok) {
-                alert("Gagal mengambil data profil. Mungkin token tidak valid.");
+            if (!token) {
+                alert("Token tidak ditemukan. Silakan login ulang.");
                 return;
             }
 
-            // ✅ Kalau data dibungkus dalam { data: {...} }
+            const res = await fetch('/api/profile/admin', {
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    "Accept": "application/json"
+                }
+            });
+
+            const result = await res.json();
+            console.log("Response dari /api/profile/admin:", result);
+
+            if (!res.ok) {
+                alert("Gagal mengambil data profil admin!");
+                return;
+            }
+
             const user = result.data ?? result;
 
             document.querySelector('[name="name"]').value = user.name ?? '';
             document.querySelector('[name="username"]').value = user.username ?? '';
             document.querySelector('[name="email"]').value = user.email ?? '';
-
-            document.getElementById("editForm").addEventListener("submit", async function(e) {
-                e.preventDefault();
-
-                const formData = {
-                    name: this.name.value,
-                    username: this.username.value,
-                    email: this.email.value,
-                };
-
-                if (this.password.value) {
-                    formData.password = this.password.value;
-                }
-
-                const updateRes = await fetch('/api/profile/admin', {
-                    method: "PUT",
-                    headers: {
-                        "Authorization": "Bearer " + token,
-                        "Accept": "application/json",
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(formData)
-                });
-
-                if (updateRes.ok) {
-                    alert("Profil berhasil diperbarui!");
-                    window.location.href = "/profile-admin";
-                } else {
-                    alert("Gagal update profil.");
-                }
-            });
         });
     </script>
 @endsection
