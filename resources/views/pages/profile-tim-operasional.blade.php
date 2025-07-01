@@ -61,7 +61,6 @@
                             <button class="btn btn-sm btn-danger" onclick="hapusUser(${user.id})">Hapus</button>
                         </td>       
                     </tr>
-                    // perubahan pada href="/profile-tim-operasional/edit/
                 `;
                     });
                 }
