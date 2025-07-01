@@ -35,7 +35,7 @@
 
             try {
                 const res = await fetch(
-                    '/api/profile/{{ Request::segment(2) === 'admin' ? 'admin' : 'tim-operasional' }}', {
+                    '/api/profile/{{ request()->segment(2) === 'admin' ? 'admin' : 'tim-operasional' }}', {
                         headers: {
                             "Authorization": "Bearer " + token,
                             "Accept": "application/json",
@@ -70,7 +70,7 @@
                     }
 
                     const updateRes = await fetch(
-                        '/api/profile/{{ Request::segment(2) === 'admin' ? 'admin' : 'tim-operasional' }}', {
+                        '/api/profile/{{ request()->segment(2) === 'admin' ? 'admin' : 'tim-operasional' }}', {
                             method: "PUT",
                             headers: {
                                 "Authorization": "Bearer " + token,
