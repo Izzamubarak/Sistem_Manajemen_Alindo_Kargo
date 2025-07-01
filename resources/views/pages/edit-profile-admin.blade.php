@@ -40,11 +40,19 @@
                 },
             });
 
-            const data = await res.json();
+            const result = await res.json();
 
-            document.querySelector('[name="name"]').value = data.name;
-            document.querySelector('[name="username"]').value = data.username;
-            document.querySelector('[name="email"]').value = data.email;
+            if (!res.ok) {
+                alert("Gagal mengambil data profil. Mungkin token tidak valid.");
+                return;
+            }
+
+            // ✅ Kalau data dibungkus dalam { data: {...} }
+            const user = result.data ?? result;
+
+            document.querySelector('[name="name"]').value = user.name ?? '';
+            document.querySelector('[name="username"]').value = user.username ?? '';
+            document.querySelector('[name="email"]').value = user.email ?? '';
 
             document.getElementById("editForm").addEventListener("submit", async function(e) {
                 e.preventDefault();
@@ -55,7 +63,7 @@
                     email: this.email.value,
                 };
 
-                if (this.password.value.trim()) {
+                if (this.password.value) {
                     formData.password = this.password.value;
                 }
 
@@ -63,17 +71,17 @@
                     method: "PUT",
                     headers: {
                         "Authorization": "Bearer " + token,
-                        "Content-Type": "application/json",
                         "Accept": "application/json",
+                        "Content-Type": "application/json"
                     },
-                    body: JSON.stringify(formData),
+                    body: JSON.stringify(formData)
                 });
 
                 if (updateRes.ok) {
-                    alert("Profil berhasil diperbarui.");
+                    alert("Profil berhasil diperbarui!");
                     window.location.href = "/profile-admin";
                 } else {
-                    alert("Gagal memperbarui profil.");
+                    alert("Gagal update profil.");
                 }
             });
         });

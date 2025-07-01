@@ -1,11 +1,11 @@
-<!-- edit-admin.blade.php -->
+<!-- edit-tim-operasional.blade.php -->
 @extends('layouts.app')
-@section('title', 'Edit Profil Admin')
+@section('title', 'Edit Profil tim-operasional')
 @section('content')
     @include('partials.header')
 
     <div class="container">
-        <h2>Edit Profil Admin</h2>
+        <h2>Edit Profil tim-operasional</h2>
         <form id="editForm">
             <div class="form-group">
                 <label>Nama</label>
@@ -25,7 +25,7 @@
             </div>
 
             <button class="btn btn-primary">Update</button>
-            <a href="/profile-admin" class="btn btn-secondary">Kembali</a>
+            <a href="/profile-tim-operasional" class="btn btn-secondary">Kembali</a>
         </form>
     </div>
 
@@ -33,18 +33,26 @@
         document.addEventListener('DOMContentLoaded', async () => {
             const token = localStorage.getItem("token");
 
-            const res = await fetch('/api/profile/admin', {
+            const res = await fetch('/api/profile/tim-operasional', {
                 headers: {
                     "Authorization": "Bearer " + token,
                     "Accept": "application/json",
                 },
             });
 
-            const data = await res.json();
+            const result = await res.json();
 
-            document.querySelector('[name="name"]').value = data.name;
-            document.querySelector('[name="username"]').value = data.username;
-            document.querySelector('[name="email"]').value = data.email;
+            if (!res.ok) {
+                alert("Gagal mengambil data profil. Mungkin token tidak valid.");
+                return;
+            }
+
+            // ✅ Kalau data dibungkus dalam { data: {...} }
+            const user = result.data ?? result;
+
+            document.querySelector('[name="name"]').value = user.name ?? '';
+            document.querySelector('[name="username"]').value = user.username ?? '';
+            document.querySelector('[name="email"]').value = user.email ?? '';
 
             document.getElementById("editForm").addEventListener("submit", async function(e) {
                 e.preventDefault();
@@ -55,25 +63,25 @@
                     email: this.email.value,
                 };
 
-                if (this.password.value.trim()) {
+                if (this.password.value) {
                     formData.password = this.password.value;
                 }
 
-                const updateRes = await fetch('/api/profile/admin', {
+                const updateRes = await fetch('/api/profile/tim-operasional', {
                     method: "PUT",
                     headers: {
                         "Authorization": "Bearer " + token,
-                        "Content-Type": "application/json",
                         "Accept": "application/json",
+                        "Content-Type": "application/json"
                     },
-                    body: JSON.stringify(formData),
+                    body: JSON.stringify(formData)
                 });
 
                 if (updateRes.ok) {
-                    alert("Profil berhasil diperbarui.");
-                    window.location.href = "/profile-admin";
+                    alert("Profil berhasil diperbarui!");
+                    window.location.href = "/profile-tim-operasional";
                 } else {
-                    alert("Gagal memperbarui profil.");
+                    alert("Gagal update profil.");
                 }
             });
         });
