@@ -195,7 +195,7 @@
                 penerima: form.penerima.value,
                 no_hp_penerima: form.no_hp_penerima.value,
                 alamat_penerima: form.alamat_penerima.value,
-                status: "Dalam Proses"
+
             };
             if (vendorIds.length > 0) {
                 formData.vendor_ids = vendorIds;
