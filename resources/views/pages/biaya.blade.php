@@ -99,7 +99,7 @@
                             <td>Rp${pengeluaran.toLocaleString()}</td>
                             <td>Rp${pendapatan.toLocaleString()}</td>
                             <td>
-                                <a href="/biaya/edit/${item.id}" class="btn btn-sm btn-warning">Edit</a>
+                                <a href="/biaya/edit/${item.id}" class="btn btn-sm btn-warning">Input</a>
                             </td>
                         </tr>
                     `;
