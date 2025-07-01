@@ -7,8 +7,6 @@
         <h2>Data Paket</h2>
         <button id="btn-paket" class="btn btn-primary mb-3" onclick="window.location.href='/paket/create'">Tambah
             Paket</button>
-        {{-- <button id="btn-export" class="btn btn-success mb-3 ml-2" style="display: none;"
-            onclick="window.location.href='{{ route('paket.export') }}'">Export ke Excel</button> --}}
 
         <table class="table table-bordered" id="paketTable">
             <thead>
@@ -127,28 +125,26 @@
                     }
 
                     tbody.innerHTML += `
-    <tr>
-        <td>${index + 1}</td>
-        <td>${item.resi}</td>
-        <td>${item.description}</td>
-        <td>${item.weight}</td>
-        <td>${item.volume}</td>
-        <td>${item.jumlah_koli}</td>
-        <td>${item.kota_asal}</td>
-        <td>${item.kota_tujuan}</td>
-        <td>Rp${parseFloat(item.cost).toLocaleString('id-ID')}</td>
-        <td>${item.penerima}</td>
-        <td>${item.no_hp_penerima}</td>
-        <td>${vendorList || '-'}</td>
-        <td>${pengirim}</td> <!-- ✅ tampilkan nama pengirim -->
-        <td>${new Date(item.created_at).toLocaleDateString('id-ID')}</td>
-        <td><span class="badge ${badgeClass}">${item.status || 'Dalam Proses'}</span></td>
-        <td>${actionButtons}</td>
-    </tr>
-    `;
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${item.resi}</td>
+                            <td>${item.description}</td>
+                            <td>${item.weight}</td>
+                            <td>${item.volume}</td>
+                            <td>${item.jumlah_koli}</td>
+                            <td>${item.kota_asal}</td>
+                            <td>${item.kota_tujuan}</td>
+                            <td>Rp${parseFloat(item.cost).toLocaleString('id-ID')}</td>
+                            <td>${item.penerima}</td>
+                            <td>${item.no_hp_penerima}</td>
+                            <td>${vendorList || '-'}</td>
+                            <td>${pengirim}</td> <!-- ✅ tampilkan nama pengirim -->
+                            <td>${new Date(item.created_at).toLocaleDateString('id-ID')}</td>
+                            <td><span class="badge ${badgeClass}">${item.status || 'Dalam Proses'}</span></td>
+                            <td>${actionButtons}</td>
+                        </tr>
+                        `;
                 });
-
-
 
             } catch (error) {
                 tbody.innerHTML =
@@ -163,7 +159,7 @@
 
         function cetakInvoice(id) {
             const token = localStorage.getItem("token");
-            window.open(`/api/invoice/download?paket_id=${id}&token=${token}`, '_blank');
+            window.open(`/invoice/download?package_id=${id}`, '_blank');
         }
 
         async function hapusPaket(id) {
