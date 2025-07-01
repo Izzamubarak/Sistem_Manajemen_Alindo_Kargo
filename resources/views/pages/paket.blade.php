@@ -39,56 +39,6 @@
         </table>
     </div>
 
-    <!-- Modal Ubah Status -->
-    <div class="modal fade" id="statusModal" tabindex="-1" role="dialog" aria-labelledby="statusModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <form id="formStatusUpdate">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Ubah Status Paket</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label>Status</label>
-                            <select name="status" class="form-control" id="statusSelect">
-                                <option value="Dalam Proses">Dalam Proses</option>
-                                <option value="Terkirim">Terkirim</option>
-                                <option value="Gagal">Gagal</option>
-                            </select>
-                        </div>
-                        <input type="hidden" id="paketIdForStatus">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Simpan</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Lihat Invoice -->
-    <div class="modal fade" id="invoiceModal" tabindex="-1" role="dialog" aria-labelledby="invoiceModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Detail Invoice</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" id="invoiceContent">
-                    <p>Memuat...</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -166,15 +116,14 @@
                     const pengirim = item.creator?.name || '-'; // ✅ ambil nama user yang buat
 
                     let actionButtons = `
-        <button class="btn btn-sm btn-info" onclick="editPaket(${item.id})">Edit</button>
-        <button class="btn btn-sm btn-danger" onclick="hapusPaket(${item.id})">Hapus</button>
-    `;
+                        <button class="btn btn-sm btn-info" onclick="editPaket(${item.id})">Edit</button>
+                        <button class="btn btn-sm btn-danger" onclick="hapusPaket(${item.id})">Hapus</button>
+                    `;
 
                     if (role !== 'admin') {
                         actionButtons += `
-            <button class="btn btn-sm btn-warning btn-ubah-status" onclick="bukaModalStatus(${item.id}, '${item.status}')">Ubah Status</button>
-            <button class="btn btn-sm btn-secondary btn-invoce" onclick="lihatInvoice(${item.id})">Lihat Invoice</button>
-        `;
+                             <button class="btn btn-sm btn-secondary" onclick="cetakInvoice(${item.id})">Cetak Invoice</button>
+                        `;
                     }
 
                     tbody.innerHTML += `
@@ -212,38 +161,9 @@
             window.location.href = `/paket/edit/${id}`;
         }
 
-        async function lihatInvoice(paketId) {
+        function cetakInvoice(id) {
             const token = localStorage.getItem("token");
-            try {
-                const response = await fetch(`/api/paket/${paketId}`, {
-                    headers: {
-                        'Authorization': 'Bearer ' + token,
-                        'Accept': 'application/json'
-                    }
-                });
-
-                if (!response.ok) throw new Error("Gagal mengambil data paket.");
-
-                const paket = await response.json();
-
-                document.getElementById("invoiceContent").innerHTML = `
-            <ul class="list-group">
-                <li class="list-group-item"><strong>No Invoice:</strong> ${paket?.id}</li>
-                <li class="list-group-item"><strong>Total:</strong> Rp${parseFloat(paket?.cost).toLocaleString('id-ID')}</li>
-                <li class="list-group-item"><strong>Status:</strong> ${paket?.status}</li>
-                <li class="list-group-item">
-  <strong>Vendors:</strong><br>
-  ${paket?.vendors?.map(v => `${v.name} (Rp${v.pivot?.biaya_vendor ?? 0})`).join('<br>') || '-'}
-</li>
-                <li class="list-group-item"><strong>Dibuat Oleh (User ID):</strong> ${paket?.created_by}</li>
-            </ul>
-        `;
-
-                $('#invoiceModal').modal('show');
-            } catch (error) {
-                document.getElementById("invoiceContent").innerHTML = `<p class="text-danger">${error.message}</p>`;
-                $('#invoiceModal').modal('show');
-            }
+            window.open(`/api/invoice/download?paket_id=${id}&token=${token}`, '_blank');
         }
 
         async function hapusPaket(id) {
@@ -265,39 +185,6 @@
                 alert("Gagal menghapus paket.");
             }
         }
-
-        function bukaModalStatus(id, currentStatus) {
-            document.getElementById("paketIdForStatus").value = id;
-            document.getElementById("statusSelect").value = currentStatus || "Dalam Proses";
-            $('#statusModal').modal('show');
-        }
-
-        document.getElementById("formStatusUpdate").addEventListener("submit", async function(e) {
-            e.preventDefault();
-
-            const id = document.getElementById("paketIdForStatus").value;
-            const status = document.getElementById("statusSelect").value;
-            const token = localStorage.getItem("token");
-
-            const res = await fetch(`/api/paket/${id}`, {
-                method: "PUT",
-                headers: {
-                    "Authorization": "Bearer " + token,
-                    "Content-Type": "application/json",
-                    "Accept": "application/json",
-                },
-                body: JSON.stringify({
-                    status
-                })
-            });
-
-            if (res.ok) {
-                $('#statusModal').modal('hide');
-                location.reload();
-            } else {
-                alert("Gagal memperbarui status");
-            }
-        });
     </script>
 
 @endsection
