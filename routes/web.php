@@ -69,8 +69,6 @@ Route::get('/biaya/edit/{id}', function ($id) {
 
 
 Route::get('/invoice/download', [InvoiceController::class, 'download'])->name('invoice.download');
-
-// Route::get('/paket/export', [PaketExportController::class, 'export'])->name('paket.export');
 Route::get('/biaya/export', [BiayaExportController::class, 'export'])->name('biaya.export');
 Route::get('/laporan/export', [LaporanExportController::class, 'export'])->name('laporan.export');
 

@@ -120,7 +120,7 @@
 
                     if (role !== 'admin') {
                         actionButtons += `
-                             <button class="btn btn-sm btn-secondary" onclick="cetakInvoice(${item.id})">Cetak Invoice</button>
+                             <button class="btn btn-sm btn-secondary" onclick="cetakInvoice(${item.id})">Lihat Invoice</button>
                         `;
                     }
 

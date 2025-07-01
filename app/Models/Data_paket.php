@@ -49,4 +49,16 @@ class Data_paket extends Model
             ->withPivot('biaya_vendor')
             ->withTimestamps();
     }
+    public function Biaya_operasional()
+    {
+        return $this->hasOne(Biaya_operasional::class, 'resi', 'resi');
+    }
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($paket) {
+            $paket->biayaOperasional()?->delete();
+        });
+    }
 }
