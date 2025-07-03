@@ -27,6 +27,7 @@
         <button href="{{ route('laporan.export', ['bulan' => $bulan, 'tahun' => $tahun]) }}" class="btn btn-success">
             <i class="fa fa-file-excel"></i> Export Excel
         </button>
+        
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -46,6 +47,23 @@
                 </tr>
             </thead>
             <tbody>
+                <tfoot>
+    <tr>
+        <td colspan="11" class="text-right">Total</td>
+        <td>Rp {{ number_format($data->sum(function($p) {
+            $biayaVendor = $p->total_vendor ?? $p->vendors->sum('pivot.biaya_vendor');
+            $biayaLainnya = is_array($p->biaya_lainnya) ? array_sum($p->biaya_lainnya) : ($p->biaya_lainnya ?? 0);
+            return $biayaVendor + $biayaLainnya;
+        }), 0, ',', '.') }}</td>
+        <td>Rp {{ number_format($data->sum(function($p) {
+            $biayaVendor = $p->total_vendor ?? $p->vendors->sum('pivot.biaya_vendor');
+            $biayaLainnya = is_array($p->biaya_lainnya) ? array_sum($p->biaya_lainnya) : ($p->biaya_lainnya ?? 0);
+            return ($p->cost ?? 0) - ($biayaVendor + $biayaLainnya);
+        }), 0, ',', '.') }}</td>
+        <td></td>
+    </tr>
+</tfoot>
+
                 @forelse ($data as $paket)
                     <tr>
                         <td>{{ $paket->resi }}</td>
