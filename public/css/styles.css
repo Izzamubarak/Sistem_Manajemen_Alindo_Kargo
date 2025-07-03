@@ -10677,3 +10677,35 @@ body {
 .sb-sidenav-light .sb-sidenav-footer {
     background-color: #e9ecef;
 }
+
+
+.table.custom-blue th {
+    background-color: #0066cc;
+    color: white;
+    text-align: left;
+    padding: 10px;
+}
+
+.table.custom-blue td {
+    padding: 10px;
+    border: 1px solid #dee2e6;
+    background-color: #f9f9f9;
+}
+
+.table.custom-blue tr:nth-child(even) td {
+    background-color: #f1f8ff;
+}
+
+.table.custom-blue tr:hover td {
+    background-color: #e0f0ff;
+}
+
+.table.custom-blue tfoot td {
+    font-weight: bold;
+    background-color: #d9edf7;
+    color: #000;
+}
+
+.text-right {
+    text-align: right;
+}
