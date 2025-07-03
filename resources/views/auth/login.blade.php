@@ -1,5 +1,79 @@
-@extends('layouts.app')
-@section('content')
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Alindo Cargo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: url('{{ asset('logo3.jpg') }}') no-repeat center center fixed;
+            background-size: cover;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-container {
+            display: flex;
+            background-color: white;
+            border-radius: 20px;
+            overflow: hidden;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .login-left {
+            background-color: #fff;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .login-left img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .login-right {
+            flex: 1;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-right h4 {
+            font-weight: bold;
+        }
+
+        .form-control {
+            border-radius: 30px;
+            padding-left: 20px;
+        }
+
+        .btn-login {
+            border-radius: 30px;
+            background-color: #007BFF;
+            color: white;
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
     <div class="login-container">
         <div class="login-left">
             <img src="{{ asset('images/logo1.png') }}" alt="Logo Alindo">
@@ -50,4 +124,6 @@
             }
         });
     </script>
-@endsection
+</body>
+
+</html>
