@@ -2,10 +2,10 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login - Alindo Cargo</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet" />
     <style>
         body {
             background: url('{{ asset('images/logo3.png') }}') no-repeat center center fixed;
@@ -15,6 +15,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         .login-container {
@@ -22,13 +23,13 @@
             background-color: white;
             border-radius: 20px;
             overflow: hidden;
-            max-width: 800px;
+            max-width: 850px;
             width: 100%;
             box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
         }
 
         .login-left {
-            background-color: #fff;
+            background-color: #ffffff;
             flex: 1;
             display: flex;
             align-items: center;
@@ -37,7 +38,7 @@
         }
 
         .login-left img {
-            max-width: 100%;
+            max-width: 250px;
             height: auto;
         }
 
@@ -51,18 +52,42 @@
 
         .login-right h4 {
             font-weight: bold;
+            color: #333;
         }
 
         .form-control {
             border-radius: 30px;
             padding-left: 20px;
+            height: 45px;
         }
 
         .btn-login {
             border-radius: 30px;
-            background-color: #007BFF;
+            background-color: #0051d4;
             color: white;
             width: 100%;
+            height: 45px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-login:hover {
+            background-color: #003f9a;
+        }
+
+        .form-group i {
+            position: absolute;
+            margin-top: 12px;
+            margin-left: 15px;
+            color: #888;
+        }
+
+        .input-icon {
+            position: relative;
+        }
+
+        .input-icon input {
+            padding-left: 40px;
         }
 
         @media (max-width: 768px) {
@@ -76,17 +101,19 @@
 <body>
     <div class="login-container">
         <div class="login-left">
-            <img src="{{ asset('images/logo1.png') }}" alt="Logo Alindo">
+            <img src="{{ asset('images/logo1.png') }}" alt="Logo Alindo" />
         </div>
         <div class="login-right">
-            <h4 class="text-center">Selamat Datang</h4>
-            <p class="text-center">Anda berada di Sistem Manajemen PT. Alindo</p>
+            <h4 class="text-center mb-2">Selamat Datang</h4>
+            <p class="text-center mb-4">Anda berada di Sistem Manajemen PT. Alindo</p>
             <form action="#" method="POST" id="loginForm">
-                <div class="form-group">
-                    <input type="text" class="form-control" name="email" placeholder="email">
+                <div class="form-group input-icon">
+                    <i class="fas fa-envelope"></i>
+                    <input type="text" class="form-control" name="email" placeholder="Email" required />
                 </div>
-                <div class="form-group">
-                    <input type="password" class="form-control" name="password" placeholder="password">
+                <div class="form-group input-icon">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" class="form-control" name="password" placeholder="Password" required />
                 </div>
                 <div class="form-group text-right">
                     <a href="#">Lupa Password?</a>
@@ -95,6 +122,10 @@
             </form>
         </div>
     </div>
+
+    <!-- Font Awesome (untuk ikon input) -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
     <script>
         document.getElementById("loginForm").addEventListener("submit", async function(e) {
             e.preventDefault();
