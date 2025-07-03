@@ -8,7 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background: url('{{ asset('logo3.jpg') }}') no-repeat center center fixed;
+            background: url('{{ asset('images/logo3.png') }}') no-repeat center center fixed;
             background-size: cover;
             height: 100vh;
             margin: 0;
