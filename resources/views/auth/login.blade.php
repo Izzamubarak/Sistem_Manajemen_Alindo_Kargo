@@ -1,5 +1,4 @@
 @extends('layouts.app')
-@section('title', 'Dashboard')
 @section('content')
     <div class="login-container">
         <div class="login-left">
