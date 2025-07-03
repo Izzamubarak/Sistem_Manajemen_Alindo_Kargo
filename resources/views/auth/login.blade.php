@@ -12,14 +12,16 @@
       background-size: cover;
       height: 100vh;
       margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 1rem;
     }
 
     .login-container {
       display: flex;
+      flex-direction: row;
       background-color: rgba(255, 255, 255, 0.85);
       border-radius: 20px;
       overflow: hidden;
@@ -31,12 +33,12 @@
 
     .login-left {
       flex: 1.2;
-      background: transparent;
-      color: #00274d;
       padding: 3rem;
       display: flex;
       flex-direction: column;
       justify-content: center;
+      background: transparent;
+      color: #00274d;
     }
 
     .login-left h1 {
@@ -59,10 +61,10 @@
     .login-right {
       flex: 1;
       padding: 3rem;
+      background-color: rgba(255, 255, 255, 0.95);
       display: flex;
       flex-direction: column;
       justify-content: center;
-      background-color: rgba(255, 255, 255, 0.95);
       border-left: 1px solid #ddd;
     }
 
@@ -111,15 +113,32 @@
     @media (max-width: 768px) {
       .login-container {
         flex-direction: column;
+        box-shadow: none;
+        border-radius: 10px;
+      }
+
+      .login-left,
+      .login-right {
+        flex: none;
+        width: 100%;
+        padding: 2rem;
       }
 
       .login-left {
-        padding: 2rem;
         text-align: center;
+        border-bottom: 1px solid #ddd;
       }
 
-      .login-right {
-        border-left: none;
+      .login-left h1 {
+        font-size: 24px;
+      }
+
+      .login-left h2 {
+        font-size: 18px;
+      }
+
+      .login-left p {
+        font-size: 13px;
       }
     }
   </style>
@@ -131,7 +150,7 @@
       <h1>ALINDO</h1>
       <h2>PT ALIF LOGISTIK INDONESIA</h2>
       <p>
-        Selamat datang. Anda sedang berada di sistem manajemen internal perusahaan.  
+        Selamat datang. Anda sedang berada di sistem manajemen internal perusahaan.<br>
         Verifikasi diri Anda jika Anda adalah salah satu staf yang bekerja di sini.
       </p>
     </div>
