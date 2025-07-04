@@ -3,8 +3,7 @@
 @section('content')
     @include('partials.header', ['title' => 'Paket', 'breadcrumb' => 'Data paket'])
 
-    <div class="container mt-4">
-        <h2>Data Paket</h2>
+    <div class="container">
         <button id="btn-paket" class="btn btn-primary mb-3" onclick="window.location.href='/paket/create'">Tambah
             Paket</button>
         <div class="table-responsive">

@@ -1,49 +1,45 @@
 @extends('layouts.app')
 @section('title', 'Dashboard')
 @section('content')
+    @include('partials.header')
 
     <div class="container">
-        <h2>Dashboard</h2>
-        <div class="container mt-4">
-            <div class="row">
-
-                <div class="col-md-4 mb-3">
-                    <div class="card text-white bg-success h-100 shadow">
-                        <div class="card-header">
-                            Total Pendapatan
-                        </div>
-                        <div class="card-body">
-                            <h4 class="card-text">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</h4>
-                            <a href="{{ route('biaya.index') }}" class="btn btn-outline-light btn-sm mt-3">Lihat Detail</a>
-                        </div>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <div class="card text-white bg-success h-100 shadow">
+                    <div class="card-header">
+                        Total Pendapatan
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-text">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</h4>
+                        <a href="{{ route('biaya.index') }}" class="btn btn-outline-light btn-sm mt-3">Lihat Detail</a>
                     </div>
                 </div>
+            </div>
 
-                <div class="col-md-4 mb-3">
-                    <div class="card text-white bg-danger h-100 shadow">
-                        <div class="card-header">
-                            Total Pengeluaran
-                        </div>
-                        <div class="card-body">
-                            <h4 class="card-text">Rp {{ number_format($totalPengeluaran, 0, ',', '.') }}</h4>
-                            <a href="{{ route('biaya.index') }}" class="btn btn-outline-light btn-sm mt-3">Lihat Detail</a>
-                        </div>
+            <div class="col-md-4 mb-3">
+                <div class="card text-white bg-danger h-100 shadow">
+                    <div class="card-header">
+                        Total Pengeluaran
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-text">Rp {{ number_format($totalPengeluaran, 0, ',', '.') }}</h4>
+                        <a href="{{ route('biaya.index') }}" class="btn btn-outline-light btn-sm mt-3">Lihat Detail</a>
                     </div>
                 </div>
+            </div>
 
-                <div class="col-md-4 mb-3">
-                    <div class="card text-white bg-primary h-100 shadow">
-                        <div class="card-header">
-                            Jumlah Paket Terkirim
-                        </div>
-                        <div class="card-body">
-                            <h4 class="card-text">{{ $jumlahPaket }} Paket</h4>
-                            <a href="{{ route('paket.index') }}" class="btn btn-outline-light btn-sm mt-3">Lihat Detail</a>
-                        </div>
-                        
+            <div class="col-md-4 mb-3">
+                <div class="card text-white bg-primary h-100 shadow">
+                    <div class="card-header">
+                        Jumlah Paket Terkirim
                     </div>
-                </div>
+                    <div class="card-body">
+                        <h4 class="card-text">{{ $jumlahPaket }} Paket</h4>
+                        <a href="{{ route('paket.index') }}" class="btn btn-outline-light btn-sm mt-3">Lihat Detail</a>
+                    </div>
 
+                </div>
             </div>
         </div>
 
