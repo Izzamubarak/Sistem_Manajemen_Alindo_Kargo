@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Manajemen User')
 @section('content')
-    @include('partials.header')
+    @include('partials.header', ['title' => 'Admin', 'breadcrumb' => 'Kelola akun admin'])
 
     <div class="container mt-4">
         <h2>Data User</h2>

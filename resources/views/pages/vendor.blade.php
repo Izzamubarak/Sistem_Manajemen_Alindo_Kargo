@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Data Vendor')
 @section('content')
-    @include('partials.header')
+    @include('partials.header', ['title' => 'Vendor', 'breadcrumb' => 'Data vendor'])
 
     <div class="container">
         <h2>Data Vendor</h2>

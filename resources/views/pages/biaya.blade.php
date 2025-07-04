@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Biaya Operasional')
 @section('content')
-    @include('partials.header')
+    @include('partials.header', ['title' => 'Biaya Operasional', 'breadcrumb' => 'Input biaya lainnya untuk memverifikasi status menjadi terkirim'])
 
     <div class="container">
         <h2>Data Biaya Operasional</h2>

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Tambah Paket')
 @section('content')
-    @include('partials.header')
+    @include('partials.header', ['title' => 'Tambah Paket', 'breadcrumb' => 'Data paket'])
 
     <div class="container mt-4">
         <h2>Tambah Paket</h2>

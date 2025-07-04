@@ -2,7 +2,7 @@
 @extends('layouts.app')
 @section('title', 'Edit Profil tim-operasional')
 @section('content')
-    @include('partials.header')
+    @include('partials.header', ['title' => 'Edit Tim Operasional', 'breadcrumb' => 'Kelola akun tim operasional'])
 
     <div class="container">
         <h2>Edit Profil tim-operasional</h2>

@@ -2,7 +2,7 @@
 @extends('layouts.app')
 @section('title', 'Edit Profil Admin')
 @section('content')
-    @include('partials.header')
+    @include('partials.header', ['title' => 'Edit Admin', 'breadcrumb' => 'Kelola akun admin'])
 
     <div class="container">
         <h2>Edit Profil Admin</h2>

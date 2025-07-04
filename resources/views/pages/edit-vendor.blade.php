@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Edit Vendor')
 @section('content')
-    @include('partials.header')
+    @include('partials.header', ['title' => 'Edit', 'breadcrumb' => 'Edit vendor'])
 
     <div class="container">
         <h2>Edit Vendor</h2>

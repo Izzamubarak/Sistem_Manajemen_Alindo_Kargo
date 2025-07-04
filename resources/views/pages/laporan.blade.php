@@ -1,6 +1,8 @@
 @extends('layouts.app')
 @section('title', 'Laporan Paket Bulanan')
 @section('content')
+    @include('partials.header', ['title' => 'Laporan', 'breadcrumb' => 'Laporan bulan ini'])
+
     <div class="container mt-4">
         <h2>Laporan Paket Terkirim Bulanan</h2>
 
