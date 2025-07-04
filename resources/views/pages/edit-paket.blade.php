@@ -4,7 +4,6 @@
     @include('partials.header', ['title' => 'Edit Paket', 'breadcrumb' => 'Data paket'])
 
     <div class="container">
-        <h2>Edit Paket</h2>
         <form id="editForm">
             <div id="vendorContainer"></div>
             <button type="button" class="btn btn-info mb-3" onclick="tambahVendor()">Tambah Vendor</button>

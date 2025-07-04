@@ -5,7 +5,6 @@
     @include('partials.header', ['title' => 'Edit Tim Operasional', 'breadcrumb' => 'Kelola akun tim operasional'])
 
     <div class="container">
-        <h2>Edit Profil tim-operasional</h2>
         <form id="editForm">
             <div class="form-group">
                 <label>Nama</label>

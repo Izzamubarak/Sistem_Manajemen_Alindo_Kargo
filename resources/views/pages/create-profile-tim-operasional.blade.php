@@ -4,7 +4,6 @@
     @include('partials.header', ['title' => 'Tambah Tim Operasional', 'breadcrumb' => 'Kelola akun tim operasional'])
 
     <div class="container mt-4">
-        <h2>Tambah User Baru</h2>
         <form id="formTambahUser">
             <div class="form-group">
                 <label>Nama Lengkap</label>

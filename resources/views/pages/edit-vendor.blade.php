@@ -4,7 +4,6 @@
     @include('partials.header', ['title' => 'Edit', 'breadcrumb' => 'Edit vendor'])
 
     <div class="container">
-        <h2>Edit Vendor</h2>
         <form id="formEditVendor">
             <div class="form-group">
                 <label>Nama Vendor</label>

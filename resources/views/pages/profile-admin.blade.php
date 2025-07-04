@@ -4,7 +4,6 @@
     @include('partials.header', ['title' => 'Admin', 'breadcrumb' => 'Kelola akun admin'])
 
     <div class="container mt-4">
-        <h2>Data User</h2>
         <button id="btn-paket" class="btn btn-primary mb-3" onclick="window.location.href='/profile-admin/create'">Tambah
             User</button>
         <div class="table-responsive">

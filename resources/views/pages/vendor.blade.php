@@ -4,7 +4,6 @@
     @include('partials.header', ['title' => 'Vendor', 'breadcrumb' => 'Data vendor'])
 
     <div class="container">
-        <h2>Data Vendor</h2>
         <a href="/vendor/create" class="btn btn-primary mb-3">Tambah Vendor</a>
         <div class="table-responsive">
             <table class="table table-bordered">

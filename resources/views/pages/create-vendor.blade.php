@@ -4,7 +4,6 @@
     @include('partials.header', ['title' => 'Tambah Vendor', 'breadcrumb' => 'Data vendor'])
 
     <div class="container">
-        <h2>Tambah Vendor</h2>
         <form id="formTambahVendor">
             <div class="form-group">
                 <label>Nama Vendor</label>

@@ -4,7 +4,6 @@
     @include('partials.header', ['title' => 'Tim Operasional', 'breadcrumb' => 'Kelola akun tim operasional'])
 
     <div class="container mt-4">
-        <h2>Data Tim Operasional</h2>
         <button id="btn-paket" class="btn btn-primary mb-3"
             onclick="window.location.href='/profile-tim-operasional/create'">Tambah User</button>
         <div class="table-responsive">

@@ -1,10 +1,9 @@
 @extends('layouts.app')
 @section('title', 'Biaya Operasional')
 @section('content')
-    @include('partials.header', ['title' => 'Biaya Operasional', 'breadcrumb' => 'Input biaya lainnya untuk memverifikasi status menjadi terkirim'])
+    @include('partials.header', ['title' => 'Biaya Operasional', 'breadcrumb' => 'Data biaya operasional'])
 
     <div class="container">
-        <h2>Data Biaya Operasional</h2>
         <button id="btn-export" class="btn btn-success mb-3 ml-2"
             onclick="window.location.href='{{ route('biaya.export') }}'"><i class="fa fa-file-excel"></i> Export
             Excel</button>

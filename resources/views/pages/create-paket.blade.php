@@ -4,7 +4,6 @@
     @include('partials.header', ['title' => 'Tambah Paket', 'breadcrumb' => 'Data paket'])
 
     <div class="container mt-4">
-        <h2>Tambah Paket</h2>
         <form id="formTambahPaket">
             <div id="vendorContainer"></div>
             <button type="button" class="btn btn-info mb-3" onclick="tambahVendor()">Tambah Vendor</button>
