@@ -52,7 +52,7 @@
             <tfoot>
                 <tr class="table-secondary">
                     <td><strong>Total Bulan Ini</strong></td>
-                    <td colspan="11"></td>
+                    <td colspan="10"></td>
                     <td class="text-right"><strong>Pengeluaran:</strong></td>
                     <td>
                         Rp
