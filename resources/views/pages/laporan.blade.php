@@ -52,8 +52,8 @@
             <tfoot>
                 <tr class="table-secondary">
                     <td><strong>Total Bulan Ini</strong></td>
-                    <td colspan="9"></td>
-                    <td colspan="1" class="text-right"><strong>Pengeluaran:</strong></td>
+                    <td colspan="11"></td>
+                    <td class="text-right"><strong>Pengeluaran:</strong></td>
                     <td>
                         Rp
                         {{ number_format(
