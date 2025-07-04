@@ -48,7 +48,6 @@
                     <th>Tanggal</th>
                 </tr>
             </thead>
-            <tbody>
             <tfoot>
                 <tr>
                     <td colspan="11" class="text-right">Total</td>
