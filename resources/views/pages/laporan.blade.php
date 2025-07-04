@@ -51,34 +51,36 @@
 
             <tfoot>
                 <tr>
-                    <td colspan="11" class="text-right"><strong>Total Bulan Ini</strong></td>
+                    <td><strong>Total Bulan Ini</strong></td>
+                    <td colspan="9"></td>
+                    <td colspan="1" class="text-right"><strong>Pengeluaran:</strong></td>
                     <td>
                         Rp
                         {{ number_format(
                             $data->sum(function ($p) {
                                 $biayaVendor = $p->total_vendor ?? $p->vendors->sum('pivot.biaya_vendor');
-                                $biayaLainnya = is_array($p->biaya_lainnya) ? array_sum($p->biaya_lainnya) : $p->biaya_lainnya ?? 0;
-                                return $biayaVendor + $biayaLainnya;
+                                $biayaLain = is_array($p->biaya_lainnya) ? array_sum($p->biaya_lainnya) : $p->biaya_lainnya ?? 0;
+                                return $biayaVendor + $biayaLain;
                             }),
                             0,
                             ',',
                             '.',
                         ) }}
                     </td>
+                    <td class="text-right"><strong>Pendapatan:</strong></td>
                     <td>
                         Rp
                         {{ number_format(
                             $data->sum(function ($p) {
                                 $biayaVendor = $p->total_vendor ?? $p->vendors->sum('pivot.biaya_vendor');
-                                $biayaLainnya = is_array($p->biaya_lainnya) ? array_sum($p->biaya_lainnya) : $p->biaya_lainnya ?? 0;
-                                return ($p->cost ?? 0) - ($biayaVendor + $biayaLainnya);
+                                $biayaLain = is_array($p->biaya_lainnya) ? array_sum($p->biaya_lainnya) : $p->biaya_lainnya ?? 0;
+                                return ($p->cost ?? 0) - ($biayaVendor + $biayaLain);
                             }),
                             0,
                             ',',
                             '.',
                         ) }}
                     </td>
-                    <td></td>
                 </tr>
             </tfoot>
 
