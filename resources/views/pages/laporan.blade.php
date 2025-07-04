@@ -51,31 +51,27 @@
 
             <tfoot>
                 <tr>
-                    <td colspan="10" class="text-right"><strong>Total</strong></td>
-                    <td colspan="1">Rp
-                        {{ number_format($data->sum(fn($p) => $p->total_vendor ?? $p->vendors->sum('pivot.biaya_vendor')), 0, ',', '.') }}
-                    </td>
-                    <td colspan="1">Rp
-                        {{ number_format($data->sum(fn($p) => is_array($p->biaya_lainnya) ? array_sum($p->biaya_lainnya) : $p->biaya_lainnya ?? 0), 0, ',', '.') }}
-                    </td>
-                    <td colspan="1">Rp
+                    <td colspan="11" class="text-right"><strong>Total Bulan Ini</strong></td>
+                    <td>
+                        Rp
                         {{ number_format(
                             $data->sum(function ($p) {
                                 $biayaVendor = $p->total_vendor ?? $p->vendors->sum('pivot.biaya_vendor');
-                                $biayaLain = is_array($p->biaya_lainnya) ? array_sum($p->biaya_lainnya) : $p->biaya_lainnya ?? 0;
-                                return $biayaVendor + $biayaLain;
+                                $biayaLainnya = is_array($p->biaya_lainnya) ? array_sum($p->biaya_lainnya) : $p->biaya_lainnya ?? 0;
+                                return $biayaVendor + $biayaLainnya;
                             }),
                             0,
                             ',',
                             '.',
                         ) }}
                     </td>
-                    <td colspan="1">Rp
+                    <td>
+                        Rp
                         {{ number_format(
                             $data->sum(function ($p) {
                                 $biayaVendor = $p->total_vendor ?? $p->vendors->sum('pivot.biaya_vendor');
-                                $biayaLain = is_array($p->biaya_lainnya) ? array_sum($p->biaya_lainnya) : $p->biaya_lainnya ?? 0;
-                                return ($p->cost ?? 0) - ($biayaVendor + $biayaLain);
+                                $biayaLainnya = is_array($p->biaya_lainnya) ? array_sum($p->biaya_lainnya) : $p->biaya_lainnya ?? 0;
+                                return ($p->cost ?? 0) - ($biayaVendor + $biayaLainnya);
                             }),
                             0,
                             ',',
