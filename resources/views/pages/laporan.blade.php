@@ -48,27 +48,34 @@
                     <th>Tanggal</th>
                 </tr>
             </thead>
+
             <tfoot>
                 <tr>
-                    <td colspan="11" class="text-right">Total</td>
-                    <td>Rp
+                    <td colspan="10" class="text-right"><strong>Total</strong></td>
+                    <td colspan="1">Rp
+                        {{ number_format($data->sum(fn($p) => $p->total_vendor ?? $p->vendors->sum('pivot.biaya_vendor')), 0, ',', '.') }}
+                    </td>
+                    <td colspan="1">Rp
+                        {{ number_format($data->sum(fn($p) => is_array($p->biaya_lainnya) ? array_sum($p->biaya_lainnya) : $p->biaya_lainnya ?? 0), 0, ',', '.') }}
+                    </td>
+                    <td colspan="1">Rp
                         {{ number_format(
                             $data->sum(function ($p) {
                                 $biayaVendor = $p->total_vendor ?? $p->vendors->sum('pivot.biaya_vendor');
-                                $biayaLainnya = is_array($p->biaya_lainnya) ? array_sum($p->biaya_lainnya) : $p->biaya_lainnya ?? 0;
-                                return $biayaVendor + $biayaLainnya;
+                                $biayaLain = is_array($p->biaya_lainnya) ? array_sum($p->biaya_lainnya) : $p->biaya_lainnya ?? 0;
+                                return $biayaVendor + $biayaLain;
                             }),
                             0,
                             ',',
                             '.',
                         ) }}
                     </td>
-                    <td>Rp
+                    <td colspan="1">Rp
                         {{ number_format(
                             $data->sum(function ($p) {
                                 $biayaVendor = $p->total_vendor ?? $p->vendors->sum('pivot.biaya_vendor');
-                                $biayaLainnya = is_array($p->biaya_lainnya) ? array_sum($p->biaya_lainnya) : $p->biaya_lainnya ?? 0;
-                                return ($p->cost ?? 0) - ($biayaVendor + $biayaLainnya);
+                                $biayaLain = is_array($p->biaya_lainnya) ? array_sum($p->biaya_lainnya) : $p->biaya_lainnya ?? 0;
+                                return ($p->cost ?? 0) - ($biayaVendor + $biayaLain);
                             }),
                             0,
                             ',',
@@ -78,8 +85,17 @@
                     <td></td>
                 </tr>
             </tfoot>
+
             <tbody>
                 @forelse ($data as $paket)
+                    @php
+                        $biayaVendor = $paket->total_vendor ?? $paket->vendors->sum('pivot.biaya_vendor');
+                        $biayaLainnya = is_array($paket->biaya_lainnya)
+                            ? array_sum($paket->biaya_lainnya)
+                            : $paket->biaya_lainnya ?? 0;
+                        $pengeluaran = $biayaVendor + $biayaLainnya;
+                        $pendapatan = ($paket->cost ?? 0) - $pengeluaran;
+                    @endphp
                     <tr>
                         <td>{{ $paket->resi }}</td>
                         <td>{{ $paket->description }}</td>
@@ -91,21 +107,15 @@
                         <td>{{ $paket->no_hp_penerima }}</td>
                         <td>{{ $paket->vendors->pluck('name')->implode(', ') ?: '-' }}</td>
                         <td>{{ $paket->creator->name ?? '-' }}</td>
-                        @php
-                            $biayaVendor = $paket->total_vendor ?? $paket->vendors->sum('pivot.biaya_vendor');
-                            $biayaLainnya = is_array($paket->biaya_lainnya)
-                                ? array_sum($paket->biaya_lainnya)
-                                : $paket->biaya_lainnya ?? 0;
-                            $pengeluaran = $biayaVendor + $biayaLainnya;
-                            $pendapatan = ($paket->cost ?? 0) - $pengeluaran;
-                        @endphp
+                        <td>Rp {{ number_format($biayaVendor, 0, ',', '.') }}</td>
+                        <td>Rp {{ number_format($biayaLainnya, 0, ',', '.') }}</td>
                         <td>Rp {{ number_format($pengeluaran, 0, ',', '.') }}</td>
                         <td>Rp {{ number_format($pendapatan, 0, ',', '.') }}</td>
                         <td>{{ $paket->created_at->format('d-m-Y') }}</td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="12" class="text-center">Tidak ada data</td>
+                        <td colspan="15" class="text-center">Tidak ada data</td>
                     </tr>
                 @endforelse
             </tbody>
