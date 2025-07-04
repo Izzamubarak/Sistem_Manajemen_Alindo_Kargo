@@ -7,34 +7,35 @@
         <h2>Data Paket</h2>
         <button id="btn-paket" class="btn btn-primary mb-3" onclick="window.location.href='/paket/create'">Tambah
             Paket</button>
-
-        <table class="table table-bordered" id="paketTable">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Resi</th>
-                    <th>Deskripsi</th>
-                    <th>Berat (kg)</th>
-                    <th>Volume (kg)</th>
-                    <th>Jumlah Koli</th>
-                    <th>Kota Asal</th>
-                    <th>Kota Tujuan</th>
-                    <th>Biaya (Rp)</th>
-                    <th>Penerima</th>
-                    <th>No HP Penerima</th>
-                    <th>Vendor</th>
-                    <th>Pengirim</th>
-                    <th>Tanggal</th>
-                    <th>Status</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody id="paketBody">
-                <tr>
-                    <td colspan="8" class="text-center">Memuat data...</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-bordered" id="paketTable">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Resi</th>
+                        <th>Deskripsi</th>
+                        <th>Berat (kg)</th>
+                        <th>Volume (kg)</th>
+                        <th>Jumlah Koli</th>
+                        <th>Kota Asal</th>
+                        <th>Kota Tujuan</th>
+                        <th>Biaya (Rp)</th>
+                        <th>Penerima</th>
+                        <th>No HP Penerima</th>
+                        <th>Vendor</th>
+                        <th>Pengirim</th>
+                        <th>Tanggal</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="paketBody">
+                    <tr>
+                        <td colspan="8" class="text-center">Memuat data...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <!-- Scripts -->

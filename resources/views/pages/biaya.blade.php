@@ -8,27 +8,28 @@
         <button id="btn-export" class="btn btn-success mb-3 ml-2"
             onclick="window.location.href='{{ route('biaya.export') }}'"><i class="fa fa-file-excel"></i> Export
             Excel</button>
+        <div class="table-responsive">
+            <table class="table table-bordered" id="biayaTable">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Resi</th>
+                        <th>Vendor</th>
+                        <th>Total Vendor</th>
+                        <th>Biaya Lainnya</th>
+                        <th>Pengeluaran</th>
+                        <th>Pendapatan</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
 
-        <table class="table table-bordered" id="biayaTable">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Resi</th>
-                    <th>Vendor</th>
-                    <th>Total Vendor</th>
-                    <th>Biaya Lainnya</th>
-                    <th>Pengeluaran</th>
-                    <th>Pendapatan</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-
-            <tbody id="biayaBody">
-                <tr>
-                    <td colspan="8" class="text-center">Memuat data...</td>
-                </tr>
-            </tbody>
-        </table>
+                <tbody id="biayaBody">
+                    <tr>
+                        <td colspan="8" class="text-center">Memuat data...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <script>

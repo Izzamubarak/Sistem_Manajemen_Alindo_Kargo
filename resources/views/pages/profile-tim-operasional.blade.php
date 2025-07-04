@@ -7,23 +7,24 @@
         <h2>Data Tim Operasional</h2>
         <button id="btn-paket" class="btn btn-primary mb-3"
             onclick="window.location.href='/profile-tim-operasional/create'">Tambah User</button>
-
-        <table class="table table-bordered" id="userTable">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Nama</th>
-                    <th>Email</th>
-                    <th>Tanggal Dibuat</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody id="userBody">
-                <tr>
-                    <td colspan="5" class="text-center">Memuat data...</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-bordered" id="userTable">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama</th>
+                        <th>Email</th>
+                        <th>Tanggal Dibuat</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="userBody">
+                    <tr>
+                        <td colspan="5" class="text-center">Memuat data...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <script>

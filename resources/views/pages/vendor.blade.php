@@ -6,23 +6,24 @@
     <div class="container">
         <h2>Data Vendor</h2>
         <a href="/vendor/create" class="btn btn-primary mb-3">Tambah Vendor</a>
-
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Nama</th>
-                    <th>Telepon</th>
-                    <th>Alamat</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody id="vendorBody">
-                <tr>
-                    <td colspan="5" class="text-center">Memuat data...</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama</th>
+                        <th>Telepon</th>
+                        <th>Alamat</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="vendorBody">
+                    <tr>
+                        <td colspan="5" class="text-center">Memuat data...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <script>
