@@ -2,22 +2,18 @@
 <html lang="en">
 
 <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@yield('title', 'Dashboard')</title>
 
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>@yield('title', 'Dashboard')</title>
+    <!-- ✅ Bootstrap 4.6 CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet" />
 
-        <!-- ✅ Bootstrap 4.6 CSS CDN -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- ✅ Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
 
-        <!-- ✅ Font Awesome -->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
-
-        <!-- ✅ Local Style -->
-        <link href="{{ secure_asset('css/styles.css') }}" rel="stylesheet" />
-    </head>
-
+    <!-- ✅ Local Style -->
+    <link href="{{ secure_asset('css/styles.css') }}" rel="stylesheet" />
 </head>
 
 <body class="sb-nav-fixed">
@@ -42,7 +38,15 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
-    {{-- <script src="{{ asset('assets/demo/datatables-demo.js') }}"></script> --}}
+
+    <script>
+        const token = localStorage.getItem("token");
+        const allowedPaths = ['/login', '/'];
+
+        if (!token && !allowedPaths.includes(window.location.pathname)) {
+            window.location.href = "/login";
+        }
+    </script>
 </body>
 
 </html>
