@@ -78,8 +78,15 @@
                 const result = await res.json();
 
                 if (res.ok) {
-                    alert('User berhasil ditambahkan');
-                    window.location.href = '/profile-admin';
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'User berhasil ditambahkan.',
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        window.location.href = '/profile-admin';
+                    });
                 } else {
                     let errorMsg = result.message || "Terjadi kesalahan";
                     if (result.errors) {
