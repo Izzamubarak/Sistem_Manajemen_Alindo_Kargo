@@ -2,7 +2,10 @@
 @extends('layouts.app')
 @section('title', 'Edit Profil tim-operasional')
 @section('content')
-    @include('partials.header', ['title' => 'Edit Tim Operasional', 'breadcrumb' => 'Kelola akun tim operasional'])
+    @include('partials.header', [
+        'title' => 'Edit Tim Operasional',
+        'breadcrumb' => 'Kelola akun tim operasional',
+    ])
 
     <div class="container">
         <form id="editForm">
@@ -79,11 +82,22 @@
                     body: JSON.stringify(formData)
                 });
 
-                if (updateRes.ok) {
-                    alert("Profil berhasil diperbarui!");
-                    window.location.href = `/profile-${role}`;
+                if (resUpdate.ok) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'Paket berhasil diperbarui.',
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        window.location.href = "/paket";
+                    });
                 } else {
-                    alert("Gagal update profil.");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal!',
+                        text: 'Gagal memperbarui paket.'
+                    });
                 }
             });
         });

@@ -60,11 +60,22 @@
                     body: JSON.stringify(updatedData)
                 });
 
-                if (update.ok) {
-                    alert("Vendor berhasil diupdate");
-                    window.location.href = "/vendor";
+                if (resUpdate.ok) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'Paket berhasil diperbarui.',
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        window.location.href = "/paket";
+                    });
                 } else {
-                    alert("Gagal update vendor");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal!',
+                        text: 'Gagal memperbarui paket.'
+                    });
                 }
             });
         });

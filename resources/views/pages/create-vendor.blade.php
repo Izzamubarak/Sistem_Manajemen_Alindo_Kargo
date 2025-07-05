@@ -45,13 +45,34 @@
                 body: JSON.stringify(data)
             });
 
-            if (response.ok) {
-                alert('Vendor berhasil ditambahkan');
-                window.location.href = '/vendor';
+            if (res.ok) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: 'User berhasil ditambahkan.',
+                    timer: 2000,
+                    showConfirmButton: false
+                }).then(() => {
+                    window.location.href = '/profile-admin';
+                });
             } else {
-                const error = await response.json();
-                alert('Gagal tambah vendor: ' + JSON.stringify(error.errors));
+                let errorMsg = result.message || "Terjadi kesalahan";
+                if (result.errors) {
+                    errorMsg = Object.values(result.errors).flat().join("\n");
+                }
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal menambahkan user',
+                    text: errorMsg
+                });
             }
+
+        } catch (err) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Terjadi Kesalahan',
+                text: err.message
+            });
         });
     </script>
 @endsection

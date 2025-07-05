@@ -167,10 +167,21 @@
                 });
 
                 if (resUpdate.ok) {
-                    alert("Paket berhasil diperbarui!");
-                    window.location.href = "/paket";
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'Paket berhasil diperbarui.',
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        window.location.href = "/paket";
+                    });
                 } else {
-                    alert("Gagal memperbarui paket.");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal!',
+                        text: 'Gagal memperbarui paket.'
+                    });
                 }
             });
         });

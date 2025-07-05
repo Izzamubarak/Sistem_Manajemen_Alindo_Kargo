@@ -79,11 +79,22 @@
                     body: JSON.stringify(formData)
                 });
 
-                if (updateRes.ok) {
-                    alert("Profil berhasil diperbarui!");
-                    window.location.href = `/profile-${role}`;
+                if (resUpdate.ok) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'Paket berhasil diperbarui.',
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        window.location.href = "/paket";
+                    });
                 } else {
-                    alert("Gagal update profil.");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal!',
+                        text: 'Gagal memperbarui paket.'
+                    });
                 }
             });
         });

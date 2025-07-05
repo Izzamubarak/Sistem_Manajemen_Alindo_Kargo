@@ -22,7 +22,7 @@
                 <label>Kota Asal</label>
                 <input type="text" name="kota_asal" class="form-control" value="Yogyakarta" readonly>
             </div>
-            
+
             <div class="form-group">
                 <label>Kota Tujuan</label>
                 <input type="text" name="kota_tujuan" class="form-control" required>
@@ -214,14 +214,34 @@
 
                 const result = await response.json();
 
-                if (response.ok) {
-                    alert('Paket berhasil ditambahkan');
-                    window.location.href = '/paket';
+                if (res.ok) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'User berhasil ditambahkan.',
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        window.location.href = '/profile-admin';
+                    });
                 } else {
-                    alert('Gagal tambah paket:\n' + JSON.stringify(result.errors || result.message));
+                    let errorMsg = result.message || "Terjadi kesalahan";
+                    if (result.errors) {
+                        errorMsg = Object.values(result.errors).flat().join("\n");
+                    }
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal menambahkan user',
+                        text: errorMsg
+                    });
                 }
+
             } catch (err) {
-                alert('Terjadi kesalahan:\n' + err.message);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Terjadi Kesalahan',
+                    text: err.message
+                });
             }
         });
     </script>

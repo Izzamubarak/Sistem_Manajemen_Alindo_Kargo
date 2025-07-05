@@ -1,7 +1,10 @@
 @extends('layouts.app')
 @section('title', 'Tambah User')
 @section('content')
-    @include('partials.header', ['title' => 'Tambah Tim Operasional', 'breadcrumb' => 'Kelola akun tim operasional'])
+    @include('partials.header', [
+        'title' => 'Tambah Tim Operasional',
+        'breadcrumb' => 'Kelola akun tim operasional',
+    ])
 
     <div class="container mt-4">
         <form id="formTambahUser">
@@ -78,18 +81,33 @@
                 const result = await res.json();
 
                 if (res.ok) {
-                    alert('User berhasil ditambahkan');
-                    window.location.href = '/profile-tim-operasional';
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'User berhasil ditambahkan.',
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        window.location.href = '/profile-admin';
+                    });
                 } else {
                     let errorMsg = result.message || "Terjadi kesalahan";
                     if (result.errors) {
                         errorMsg = Object.values(result.errors).flat().join("\n");
                     }
-                    alert("Gagal menambahkan user:\n" + errorMsg);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal menambahkan user',
+                        text: errorMsg
+                    });
                 }
 
             } catch (err) {
-                alert("Terjadi kesalahan: " + err.message);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Terjadi Kesalahan',
+                    text: err.message
+                });
             }
         });
     </script>
