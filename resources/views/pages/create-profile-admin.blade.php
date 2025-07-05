@@ -39,7 +39,6 @@
                 return;
             }
 
-            // ✅ Cek apakah user yang login adalah super-admin
             try {
                 const check = await fetch('/api/user', {
                     method: 'GET',
@@ -86,11 +85,19 @@
                     if (result.errors) {
                         errorMsg = Object.values(result.errors).flat().join("\n");
                     }
-                    alert("Gagal menambahkan user:\n" + errorMsg);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal menambahkan user',
+                        text: errorMsg
+                    });
                 }
 
             } catch (err) {
-                alert("Terjadi kesalahan: " + err.message);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Terjadi Kesalahan',
+                    text: err.message
+                });
             }
         });
     </script>
