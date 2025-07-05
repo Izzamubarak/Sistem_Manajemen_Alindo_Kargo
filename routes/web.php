@@ -84,6 +84,9 @@ Route::get('/vendor/create', function () {
 Route::get('/vendor/edit/{id}', function ($id) {
     return view('pages.edit-vendor', ['id' => $id]);
 })->name('vendor.edit');
+Route::fallback(function () {
+    return response()->view('errors.404', [], 404);
+});
 
 Route::post('/logout', function () {
     Auth::logout();
