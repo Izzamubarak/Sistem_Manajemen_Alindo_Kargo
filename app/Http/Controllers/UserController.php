@@ -78,7 +78,7 @@ class UserController extends Controller
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
-        $tim = User::where('role', 'tim-operasional')->firstOrFail();
+        $tim = User::where('role', 'tim-operasional')->get();
         return response()->json($tim);
     }
 
