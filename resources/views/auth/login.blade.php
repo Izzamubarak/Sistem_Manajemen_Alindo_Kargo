@@ -94,9 +94,11 @@
 
         .form-group i {
             position: absolute;
-            margin-top: 12px;
-            margin-left: 15px;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
             color: #888;
+            pointer-events: none;
         }
 
         .input-icon {
