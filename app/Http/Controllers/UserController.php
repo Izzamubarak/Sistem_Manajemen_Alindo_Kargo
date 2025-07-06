@@ -130,8 +130,7 @@ class UserController extends Controller
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
-        $admin = User::where('role', 'admin')->firstOrFail();
-        return response()->json($admin);
+        $admins = User::where('role', 'admin')->get(); // ✅ Ambil semua admin
         return response()->json($admins);
     }
 
