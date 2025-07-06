@@ -42,16 +42,30 @@
 
     <script>
         const token = localStorage.getItem("token");
-        const allowedPaths = ['/login', '/'];
+        const path = window.location.pathname;
+        const publicPaths = ["/", "/login"];
 
-        // Kalau belum login dan akses halaman private
-        if (!token && !allowedPaths.includes(window.location.pathname)) {
+        // Kalau belum login dan akses halaman privat → tendang ke login
+        if (!token && !publicPaths.includes(path)) {
             window.location.href = "/login";
         }
 
-        // Kalau sudah login tapi masih di halaman login atau root
-        if (token && allowedPaths.includes(window.location.pathname)) {
+        // Kalau sudah login tapi masih di halaman login → arahkan ke /home
+        if (token && path === "/login") {
             window.location.href = "/home";
+        }
+
+        // Kalau sedang di halaman login → hapus token
+        if (path === "/login") {
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+        }
+    </script>
+    @stack('scripts')
+    <script>
+        function clearToken() {
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
         }
     </script>
 </body>

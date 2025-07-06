@@ -8,9 +8,9 @@
                 <i class="fas fa-user fa-fw"></i>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
-                <form method="POST" action="{{ route('logout') }}">
+                <form id="logoutForm" method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="dropdown-item">Logout</button>
+                    <button type="submit" class="dropdown-item" onclick="clearToken()">Logout</button>
                 </form>
             </div>
         </li>

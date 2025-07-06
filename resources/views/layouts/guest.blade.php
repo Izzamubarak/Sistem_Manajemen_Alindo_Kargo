@@ -23,12 +23,20 @@
         const path = window.location.pathname;
         const publicPaths = ["/", "/login"];
 
+        // Kalau belum login dan akses halaman privat → tendang ke login
         if (!token && !publicPaths.includes(path)) {
             window.location.href = "/login";
         }
 
-        if (token && publicPaths.includes(path)) {
+        // Kalau sudah login tapi masih di halaman login → arahkan ke /home
+        if (token && path === "/login") {
             window.location.href = "/home";
+        }
+
+        // Kalau sedang di halaman login → hapus token
+        if (path === "/login") {
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
         }
     </script>
 
