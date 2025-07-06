@@ -44,8 +44,14 @@
         const token = localStorage.getItem("token");
         const allowedPaths = ['/login', '/'];
 
+        // Kalau belum login dan akses halaman private
         if (!token && !allowedPaths.includes(window.location.pathname)) {
             window.location.href = "/login";
+        }
+
+        // Kalau sudah login tapi masih di halaman login atau root
+        if (token && allowedPaths.includes(window.location.pathname)) {
+            window.location.href = "/home";
         }
     </script>
 </body>

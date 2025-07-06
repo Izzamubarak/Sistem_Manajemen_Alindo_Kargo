@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.guest')
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login - Alindo Cargo</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+@section('title', 'Login - Alindo Cargo')
+
+@push('styles')
     <style>
         body {
             background: url('{{ asset('images/logo3.png') }}') no-repeat center center fixed;
@@ -142,9 +139,9 @@
             }
         }
     </style>
-</head>
+@endpush
 
-<body>
+@section('content')
     <div class="login-container">
         <div class="login-left">
             <h1>ALINDO</h1>
@@ -171,8 +168,9 @@
             </form>
         </div>
     </div>
+@endsection
 
-    <!-- Font Awesome (untuk ikon input) -->
+@push('scripts')
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
     <script>
@@ -196,7 +194,6 @@
                 });
 
             const result = await response.json();
-
             const errorDiv = document.getElementById("errorMessage");
 
             if (response.ok) {
@@ -209,6 +206,4 @@
             }
         });
     </script>
-</body>
-
-</html>
+@endpush
