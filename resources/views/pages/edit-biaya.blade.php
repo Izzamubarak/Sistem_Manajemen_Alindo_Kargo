@@ -118,7 +118,7 @@
                     created_by: JSON.parse(localStorage.getItem('user')).id
                 };
 
-                const update = await fetch(`http://localhost:8000/api/biaya/${id}`, {
+                const update = await fetch(`/api/biaya/${id}`, {
                     method: 'PUT',
                     headers: {
                         'Authorization': 'Bearer ' + token,
