@@ -1,7 +1,10 @@
 @extends('layouts.app')
 @section('title', 'Edit Biaya')
 @section('content')
-    @include('partials.header' , ['title' => 'Biaya Operasional', 'breadcrumb' => 'Input Biaya operasional'])
+    @include('partials.header', [
+        'title' => 'Biaya Operasional',
+        'breadcrumb' => 'Input Biaya operasional',
+    ])
 
     <div class="container">
         <h2>Edit Biaya Operasional</h2>
@@ -25,12 +28,13 @@
 
             <div id="biayaLainnyaContainer">
                 <label>Biaya Lainnya</label>
-                <div class="form-group biaya-lain-row">
-                    <input type="text" class="form-control mb-1" placeholder="Kegiatan" name="kegiatan[]">
-                    <input type="number" class="form-control mb-3" placeholder="Biaya (Rp)" name="biaya[]">
-                </div>
             </div>
             <button type="button" class="btn btn-sm btn-secondary mb-3" onclick="tambahBaris()">+ Tambah Biaya</button>
+
+            <div class="form-group">
+                <label>Total Biaya Lainnya (Rp)</label>
+                <input type="number" id="totalBiayaLainnya" class="form-control" readonly>
+            </div>
 
             <button type="submit" class="btn btn-primary">Update</button>
             <a href="/biaya" class="btn btn-secondary">Kembali</a>
@@ -38,17 +42,33 @@
     </div>
 
     <script>
-        function tambahBaris() {
+        function tambahBaris(kegiatan = '', biaya = '') {
             const container = document.getElementById('biayaLainnyaContainer');
+
             const row = document.createElement('div');
-            row.classList.add('form-group', 'biaya-lain-row');
+            row.classList.add('form-row', 'mb-2');
 
             row.innerHTML = `
-                <input type="text" class="form-control mb-1" placeholder="Kegiatan" name="kegiatan[]">
-                <input type="number" class="form-control mb-3" placeholder="Biaya (Rp)" name="biaya[]">
-            `;
-
+            <div class="col-md-5">
+                <input type="text" class="form-control" placeholder="Kegiatan" name="kegiatan[]" value="${kegiatan}">
+            </div>
+            <div class="col-md-4">
+                <input type="number" class="form-control biaya-input" placeholder="Biaya (Rp)" name="biaya[]" value="${biaya}" oninput="hitungTotalBiaya()">
+            </div>
+            <div class="col-md-3">
+                <button type="button" class="btn btn-danger btn-sm" onclick="this.closest('.form-row').remove(); hitungTotalBiaya();">Hapus</button>
+            </div>
+        `;
             container.appendChild(row);
+        }
+
+        function hitungTotalBiaya() {
+            const inputs = document.querySelectorAll('.biaya-input');
+            let total = 0;
+            inputs.forEach(input => {
+                total += parseFloat(input.value || 0);
+            });
+            document.getElementById('totalBiayaLainnya').value = total;
         }
 
         document.addEventListener('DOMContentLoaded', async () => {
@@ -68,33 +88,25 @@
             form.total_vendor.value = data.total_vendor ?? 0;
             form.total_paket.value = data.total_paket ?? 0;
 
-            // Tampilkan biaya lainnya jika sudah ada
             if (Array.isArray(data.biaya_lainnya)) {
-                const container = document.getElementById('biayaLainnyaContainer');
-                container.innerHTML = ''; // bersihkan baris default
-
                 data.biaya_lainnya.forEach(item => {
-                    const row = document.createElement('div');
-                    row.classList.add('form-group', 'biaya-lain-row');
-
-                    row.innerHTML = `
-                        <input type="text" class="form-control mb-1" placeholder="Kegiatan" name="kegiatan[]" value="${item.kegiatan}">
-                        <input type="number" class="form-control mb-3" placeholder="Biaya (Rp)" name="biaya[]" value="${item.biaya}">
-                    `;
-                    container.appendChild(row);
+                    tambahBaris(item.kegiatan, item.biaya);
                 });
+                hitungTotalBiaya();
             }
 
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
 
-                const kegiatan = Array.from(document.getElementsByName('kegiatan[]')).map(input => input.value.trim());
-                const biaya = Array.from(document.getElementsByName('biaya[]')).map(input => parseFloat(input.value) || 0);
+                const kegiatan = Array.from(document.getElementsByName('kegiatan[]')).map(input =>
+                    input.value.trim());
+                const biaya = Array.from(document.getElementsByName('biaya[]')).map(input =>
+                    parseFloat(input.value) || 0);
 
                 const biayaLainnya = kegiatan.map((k, i) => ({
                     kegiatan: k,
                     biaya: biaya[i]
-                })).filter(item => item.kegiatan && item.biaya); // filter yang kosong
+                })).filter(item => item.kegiatan && item.biaya);
 
                 const updated = {
                     resi: form.resi.value,
@@ -123,4 +135,5 @@
             });
         });
     </script>
+
 @endsection
