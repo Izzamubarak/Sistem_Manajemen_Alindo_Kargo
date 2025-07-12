@@ -64,17 +64,17 @@
                     Swal.fire({
                         icon: 'success',
                         title: 'Berhasil!',
-                        text: 'Paket berhasil diperbarui.',
+                        text: 'Vendor berhasil diperbarui.',
                         timer: 2000,
                         showConfirmButton: false
                     }).then(() => {
-                        window.location.href = "/paket";
+                        window.location.href = "/vendor";
                     });
                 } else {
                     Swal.fire({
                         icon: 'error',
                         title: 'Gagal!',
-                        text: 'Gagal memperbarui paket.'
+                        text: 'Gagal memperbarui vendor.'
                     });
                 }
             });

@@ -218,7 +218,7 @@
                     Swal.fire({
                         icon: 'success',
                         title: 'Berhasil!',
-                        text: 'User berhasil ditambahkan.',
+                        text: 'Paket berhasil ditambahkan.',
                         timer: 2000,
                         showConfirmButton: false
                     }).then(() => {

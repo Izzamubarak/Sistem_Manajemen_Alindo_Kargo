@@ -86,17 +86,17 @@
                     Swal.fire({
                         icon: 'success',
                         title: 'Berhasil!',
-                        text: 'Paket berhasil diperbarui.',
+                        text: 'User berhasil diperbarui.',
                         timer: 2000,
                         showConfirmButton: false
                     }).then(() => {
-                        window.location.href = "/paket";
+                        window.location.href = "/profile-tim-operasional";
                     });
                 } else {
                     Swal.fire({
                         icon: 'error',
                         title: 'Gagal!',
-                        text: 'Gagal memperbarui paket.'
+                        text: 'Gagal memperbarui user.'
                     });
                 }
             });

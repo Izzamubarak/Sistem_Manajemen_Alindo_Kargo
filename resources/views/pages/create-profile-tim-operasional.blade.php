@@ -88,7 +88,7 @@
                         timer: 2000,
                         showConfirmButton: false
                     }).then(() => {
-                        window.location.href = '/profile-admin';
+                        window.location.href = '/profile-tim-operasional';
                     });
                 } else {
                     let errorMsg = result.message || "Terjadi kesalahan";
