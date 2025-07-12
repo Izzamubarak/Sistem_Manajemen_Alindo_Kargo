@@ -214,7 +214,7 @@
 
                 const result = await response.json();
 
-                if (res.ok) {
+                if (response.ok) {
                     Swal.fire({
                         icon: 'success',
                         title: 'Berhasil!',
