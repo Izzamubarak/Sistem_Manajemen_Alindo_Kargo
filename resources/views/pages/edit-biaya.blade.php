@@ -83,7 +83,8 @@
                 }
             });
 
-            const data = await res.json();
+            const response = await res.json();
+            const data = response.data ?? response;
             form.resi.value = data.resi;
             form.total_vendor.value = data.total_vendor ?? 0;
             form.total_paket.value = data.total_paket ?? 0;
