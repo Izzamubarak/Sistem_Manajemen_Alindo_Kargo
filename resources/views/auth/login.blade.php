@@ -101,6 +101,25 @@
             pointer-events: none;
         }
 
+        .forgot-password {
+            text-align: right;
+            margin-top: -10px;
+            /* sesuaikan agar lebih dekat atau renggang */
+            margin-bottom: 15px;
+        }
+
+        .forgot-password a {
+            color: #007bff;
+            font-size: 14px;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .forgot-password a:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+
         .input-icon {
             position: relative;
         }
