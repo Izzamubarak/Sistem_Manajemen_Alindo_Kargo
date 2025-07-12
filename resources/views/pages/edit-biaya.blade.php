@@ -129,11 +129,28 @@
                 });
 
                 if (update.ok) {
-                    alert("Data berhasil diperbarui.");
-                    window.location.href = "/biaya";
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'Biaya lain berhasil ditambahkan.',
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        window.location.href = "/biaya";
+                    });
                 } else {
-                    alert("Gagal memperbarui data.");
+                    const result = await update.json(); // Tambahkan ini agar bisa baca isi response
+                    let errorMsg = result.message || "Terjadi kesalahan";
+                    if (result.errors) {
+                        errorMsg = Object.values(result.errors).flat().join("\n");
+                    }
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal menambahkan biaya lainnya',
+                        text: errorMsg
+                    });
                 }
+
             });
         });
     </script>
