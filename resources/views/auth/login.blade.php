@@ -166,6 +166,9 @@
                     <i class="fas fa-lock"></i>
                     <input type="password" class="form-control" name="password" placeholder="Password" required />
                 </div>
+                <div class="forgot-password">
+                    <a href="/forgot-password">Lupa Password?</a>
+                </div>
                 <button type="submit" class="btn btn-login">Masuk</button>
             </form>
         </div>

@@ -14,6 +14,7 @@
 
     <!-- ✅ Local Style -->
     <link href="{{ secure_asset('css/styles.css') }}" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="{{ asset('images/logo2.png') }}">
 </head>
 
 <body class="sb-nav-fixed">
