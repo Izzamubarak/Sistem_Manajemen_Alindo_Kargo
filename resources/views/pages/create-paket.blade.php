@@ -222,7 +222,7 @@
                         timer: 2000,
                         showConfirmButton: false
                     }).then(() => {
-                        window.location.href = 'paket.index';
+                        window.location.href = '/paket';
                     });
                 } else {
                     let errorMsg = result.message || "Terjadi kesalahan";
