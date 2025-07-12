@@ -64,10 +64,47 @@
     </script>
     @stack('scripts')
     <script>
-        function clearToken() {
+        async function clearToken() {
+            const token = localStorage.getItem("token");
+
+            try {
+                await fetch('/api/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Accept': 'application/json'
+                    }
+                });
+            } catch (e) {
+                console.warn("Logout API gagal, tapi token tetap dihapus lokal.");
+            }
+
             localStorage.removeItem("token");
             localStorage.removeItem("user");
         }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const btnLogout = document.getElementById("btnLogout");
+            if (btnLogout) {
+                btnLogout.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: 'Keluar?',
+                        text: 'Anda yakin ingin logout?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Ya, Logout',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            clearToken().then(() => {
+                                window.location.href = "/login";
+                            });
+                        }
+                    });
+                });
+            }
+        });
     </script>
 </body>
 

@@ -10,7 +10,7 @@
             <div class="dropdown-menu dropdown-menu-right">
                 <form id="logoutForm" method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="dropdown-item" onclick="clearToken()">Logout</button>
+                    <button type="button" class="dropdown-item" id="btnLogout">Logout</button>
                 </form>
             </div>
         </li>
