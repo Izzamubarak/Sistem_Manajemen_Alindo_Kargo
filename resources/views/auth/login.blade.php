@@ -44,7 +44,7 @@
             const password = document.querySelector('input[name="password"]').value;
 
             const response = await fetch(
-                '/login', {
+                'sistemmanajemenalindokargo-production-a8a4.up.railway.app/api/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
