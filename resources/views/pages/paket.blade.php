@@ -6,40 +6,38 @@
     <div class="container">
         <button id="btn-paket" class="btn btn-primary mb-3" onclick="window.location.href='/paket/create'">Tambah
             Paket</button>
-        <div class="table-responsive">
-            <table class="table table-bordered" id="paketTable">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Resi</th>
-                        <th>Deskripsi</th>
-                        <th>Berat (kg)</th>
-                        <th>Volume (kg)</th>
-                        <th>Jumlah Koli</th>
-                        <th>Kota Asal</th>
-                        <th>Kota Tujuan</th>
-                        <th>Biaya (Rp)</th>
-                        <th>Penerima</th>
-                        <th>No HP Penerima</th>
-                        <th>Vendor</th>
-                        <th>Pengirim</th>
-                        <th>Tanggal</th>
-                        <th>Status</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody id="paketBody">
-                    <tr>
-                        <td colspan="8" class="text-center">Memuat data...</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="card-table" id="card-table">
+            <div class="table-responsive">
+                <table id="paketTable" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Resi</th>
+                            <th>Deskripsi</th>
+                            <th>Berat (kg)</th>
+                            <th>Volume (kg)</th>
+                            <th>Jumlah Koli</th>
+                            <th>Kota Asal</th>
+                            <th>Kota Tujuan</th>
+                            <th>Biaya (Rp)</th>
+                            <th>Penerima</th>
+                            <th>No HP Penerima</th>
+                            <th>Vendor</th>
+                            <th>Pengirim</th>
+                            <th>Tanggal</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="paketBody">
+                        <tr>
+                            <td colspan="8" class="text-center">Memuat data...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-
-    <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
@@ -65,10 +63,10 @@
                 const user = await res.json();
                 role = user.role;
 
-                if (role !== 'tim-operasional') {
-                    btnPaket.style.display = 'none';
+                if (role === 'tim-operasional') {
+                    document.getElementById('card-table').style.display = 'none';
                 }
-                if (role === 'super-admin') {
+                if (role === 'super-admin' || role === 'admin') {
                     btnPaket.style.display = 'none';
                 }
                 if (role === 'tim-operasional') {
@@ -79,6 +77,7 @@
                     `<tr><td colspan="8" class="text-danger text-center">${error.message}</td></tr>`;
                 return;
             }
+
             try {
                 const response = await fetch('/api/paket', {
                     headers: {
@@ -102,57 +101,76 @@
 
                 data.forEach((item, index) => {
                     const badgeClass = item.status === 'Terkirim' ? 'badge-success' :
-                        item.status === 'Gagal' ? 'badge-danger' :
-                        'badge-warning';
+                        item.status === 'Gagal' ? 'badge-danger' : 'badge-warning';
 
-                    const vendorList = (item.vendors || [])
-                        .map(v =>
-                            `${v.name} (Rp${parseInt(v.pivot?.biaya_vendor || 0).toLocaleString('id-ID')})`
-                        )
-                        .join('<br>');
+                    const vendorList = (item.vendors || []).map(v =>
+                        `${v.name} (Rp${parseInt(v.pivot?.biaya_vendor || 0).toLocaleString('id-ID')})`
+                    ).join('<br>');
 
-                    const pengirim = item.creator?.name || '-'; // ✅ ambil nama user yang buat
+                    const pengirim = item.creator?.name || '-';
 
                     let actionButtons = `
-                        <button class="btn btn-sm btn-info" onclick="editPaket(${item.id})">Edit</button>
-                        <button class="btn btn-sm btn-danger" onclick="hapusPaket(${item.id})">Hapus</button>
+                        <button class="btn-action btn-edit" onclick="editPaket(${item.id})">
+                            <i class="fas fa-pen"></i> Edit
+                        </button>
                     `;
 
                     if (role !== 'admin') {
                         actionButtons += `
-                             <button class="btn btn-sm btn-secondary" onclick="cetakInvoice(${item.id})">Lihat Invoice</button>
+                        <button class="btn-action btn-delete" onclick="hapusPaket(${item.id})">
+                            <i class="fas fa-trash"></i> Hapus
+                        </button>
+                        <button class="btn-action btn-invoice" onclick="cetakInvoice(${item.id})">
+                            <i class="fas fa-file-invoice"></i> Invoice
+                        </button>
                         `;
                     }
 
                     tbody.innerHTML += `
-                        <tr>
-                            <td>${index + 1}</td>
-                            <td>${item.resi}</td>
-                            <td>${item.description}</td>
-                            <td>${item.weight}</td>
-                            <td>${item.volume}</td>
-                            <td>${item.jumlah_koli}</td>
-                            <td>${item.kota_asal}</td>
-                            <td>${item.kota_tujuan}</td>
-                            <td>Rp${parseFloat(item.cost).toLocaleString('id-ID')}</td>
-                            <td>${item.penerima}</td>
-                            <td>${item.no_hp_penerima}</td>
-                            <td>${vendorList || '-'}</td>
-                            <td>${pengirim}</td> <!-- ✅ tampilkan nama pengirim -->
-                            <td>${new Date(item.created_at).toLocaleDateString('id-ID')}</td>
-                            <td><span class="badge ${badgeClass}">${item.status || 'Dalam Proses'}</span></td>
-                            <td>${actionButtons}</td>
-                        </tr>
-                        `;
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${item.resi}</td>
+                    <td>${item.description}</td>
+                    <td>${item.weight}</td>
+                    <td>${item.volume}</td>
+                    <td>${item.jumlah_koli}</td>
+                    <td>${item.kota_asal}</td>
+                    <td>${item.kota_tujuan}</td>
+                    <td>Rp${parseFloat(item.cost).toLocaleString('id-ID')}</td>
+                    <td>${item.penerima}</td>
+                    <td>${item.no_hp_penerima}</td>
+                    <td>${vendorList || '-'}</td>
+                    <td>${pengirim}</td>
+                    <td>${new Date(item.created_at).toLocaleDateString('id-ID')}</td>
+                    <td>
+                        <span class="badge ${badgeClass}">${item.status || 'Dalam Proses'}</span>
+                        ${item.status === 'Gagal' && item.alasan_gagal ? `<br><small class="text-danger"><strong>Alasan:</strong> ${item.alasan_gagal}</small>` : ''}
+                    </td>
+                    <td>${actionButtons}</td>
+                </tr>
+            `;
                 });
-
+                setTimeout(() => {
+                    $('#paketTable').DataTable({
+                        pageLength: 20,
+                        lengthChange: false,
+                        destroy: true,
+                        language: {
+                            search: "Cari:",
+                            paginate: {
+                                previous: "Sebelumnya",
+                                next: "Berikutnya"
+                            },
+                            info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data"
+                        }
+                    });
+                }, 0);
             } catch (error) {
                 tbody.innerHTML =
                     `<tr><td colspan="8" class="text-danger text-center">${error.message}</td></tr>`;
             }
         });
 
-        // Function Definitions
         function editPaket(id) {
             window.location.href = `/paket/edit/${id}`;
         }
@@ -163,7 +181,18 @@
         }
 
         async function hapusPaket(id) {
-            if (!confirm("Yakin ingin menghapus paket ini?")) return;
+            const confirmResult = await Swal.fire({
+                title: 'Yakin ingin menghapus?',
+                text: "Data paket akan hilang permanen!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            });
+
+            if (!confirmResult.isConfirmed) return;
 
             const token = localStorage.getItem("token");
             const res = await fetch(`/api/paket/${id}`, {
@@ -175,10 +204,21 @@
             });
 
             if (res.ok) {
-                alert("Paket berhasil dihapus.");
-                location.reload();
+                Swal.fire({
+                    title: 'Berhasil!',
+                    text: 'Paket berhasil dihapus.',
+                    icon: 'success',
+                    timer: 1500,
+                    showConfirmButton: false
+                }).then(() => {
+                    location.reload();
+                });
             } else {
-                alert("Gagal menghapus paket.");
+                Swal.fire({
+                    title: 'Gagal!',
+                    text: 'Gagal menghapus paket.',
+                    icon: 'error'
+                });
             }
         }
     </script>

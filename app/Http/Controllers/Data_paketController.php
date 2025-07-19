@@ -37,13 +37,14 @@ class Data_paketController extends Controller
             'cost'             => 'sometimes|numeric',
             'created_by'       => 'sometimes|exists:users,id',
             'status'           => 'sometimes|string|in:Terkirim,Dalam Proses,Gagal',
+            'alasan_gagal'     => 'nullable|string',
         ]);
 
         $validated['status'] = $validated['status'] ?? 'Dalam Proses';
 
         $paket = Data_paket::create($validated);
 
-        $vendorData = []; 
+        $vendorData = [];
         // Attach vendor dan biaya_vendor
         if ($request->has('vendor_ids') && is_array($request->vendor_ids)) {
             $vendorData = [];
@@ -93,6 +94,7 @@ class Data_paketController extends Controller
             'cost'             => 'sometimes|numeric',
             'created_by'       => 'sometimes|exists:users,id',
             'status'           => 'sometimes|string|in:Terkirim,Dalam Proses,Gagal',
+            'alasan_gagal'     => 'nullable|string',
         ]);
 
         $Data_paket->update($validated);

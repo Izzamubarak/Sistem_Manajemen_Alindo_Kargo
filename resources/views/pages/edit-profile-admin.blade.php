@@ -23,7 +23,7 @@
                 <input type="password" name="password" class="form-control">
             </div>
 
-            <button class="btn btn-primary">Update</button>
+            <button type="submit" class="btn btn-primary">Update</button>
             <a href="/profile-admin" class="btn btn-secondary">Kembali</a>
         </form>
     </div>
@@ -47,8 +47,7 @@
                 alert("Gagal mengambil data profil. Mungkin token tidak valid.");
                 return;
             }
-
-            const user = result.data ?? result;
+            const user = (result.data ?? result)[0];;
 
             // Isi form
             document.querySelector('[name="name"]').value = user.name ?? '';
@@ -79,7 +78,7 @@
                     body: JSON.stringify(formData)
                 });
 
-                if (resUpdate.ok) {
+                if (updateRes.ok) {
                     Swal.fire({
                         icon: 'success',
                         title: 'Berhasil!',

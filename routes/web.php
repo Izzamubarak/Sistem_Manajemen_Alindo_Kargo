@@ -8,7 +8,9 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\BiayaExportController;
+use App\Http\Controllers\ResetRequestController;
 use App\Http\Controllers\LaporanExportController;
+use App\Http\Controllers\ResetApprovalController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -87,9 +89,16 @@ Route::get('/vendor/edit/{id}', function ($id) {
 Route::fallback(function () {
     return response()->view('errors.404', [], 404);
 });
+Route::get('/forgot-password', [ResetRequestController::class, 'showForm'])->name('forgot.form');
+Route::post('/forgot-password', [ResetRequestController::class, 'submitRequest'])->name('forgot.submit');
+
+Route::get('/reset-password/{token}', [ResetRequestController::class, 'showResetForm'])->name('reset.form');
+Route::post('/reset-password', [ResetRequestController::class, 'resetPassword'])->name('reset.submit');
+
+Route::get('/reset-approvals', [ResetApprovalController::class, 'index'])->name('reset.approvals');
+Route::post('/reset-approvals/{id}/approve', [ResetApprovalController::class, 'approve'])->name('reset-approvals.approve');
 
 Route::post('/logout', function () {
     Auth::logout();
     return redirect('/login');
 })->name('logout');
-

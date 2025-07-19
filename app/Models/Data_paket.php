@@ -24,7 +24,8 @@ class Data_paket extends Model
         'volume',
         'cost',
         'created_by',
-        'status'
+        'status',
+        'alasan_gagal'  
     ];
 
 

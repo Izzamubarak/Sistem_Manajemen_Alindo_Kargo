@@ -5,23 +5,25 @@
 
     <div class="container">
         <a href="/vendor/create" class="btn btn-primary mb-3">Tambah Vendor</a>
-        <div class="table-responsive">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Nama</th>
-                        <th>Telepon</th>
-                        <th>Alamat</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody id="vendorBody">
-                    <tr>
-                        <td colspan="5" class="text-center">Memuat data...</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="card-table">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="vendorTable">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama</th>
+                            <th>Telepon</th>
+                            <th>Alamat</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="vendorBody">
+                        <tr>
+                            <td colspan="5" class="text-center">Memuat data...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -53,13 +55,32 @@
                         <td>${v.phone}</td>
                         <td>${v.address}</td>
                         <td>
-                            <a href="/vendor/edit/${v.id}" class="btn btn-sm btn-warning">Edit</a>
-                            <button onclick="hapusVendor(${v.id})" class="btn btn-sm btn-danger">Hapus</button>
+                            <a href="/vendor/edit/${v.id}" class="btn-action btn-edit">
+                                <i class="fas fa-pen"></i> Edit
+                            </a>
+                            <button class="btn-action btn-delete" onclick="hapusVendor(${v.id})">
+                                <i class="fas fa-trash"></i> Hapus
+                            </button>
                         </td>
                     </tr>
                 `;
                     });
                 }
+                setTimeout(() => {
+                    $('#vendorTable').DataTable({
+                        pageLength: 10,
+                        lengthChange: false,
+                        destroy: true,
+                        language: {
+                            search: "Cari:",
+                            paginate: {
+                                previous: "Sebelumnya",
+                                next: "Berikutnya"
+                            },
+                            info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data"
+                        }
+                    });
+                }, 0);
             } catch (err) {
                 tbody.innerHTML =
                     `<tr><td colspan="5" class="text-center text-danger">Gagal memuat data</td></tr>`;
@@ -67,7 +88,19 @@
         });
 
         async function hapusVendor(id) {
-            if (!confirm("Yakin ingin menghapus vendor ini?")) return;
+            const confirmResult = await Swal.fire({
+                title: 'Yakin ingin menghapus vendor?',
+                text: "Data vendor akan hilang permanen!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            });
+
+            if (!confirmResult.isConfirmed) return;
+
             const token = localStorage.getItem('token');
 
             const res = await fetch(`/api/vendor/${id}`, {
@@ -79,10 +112,21 @@
             });
 
             if (res.ok) {
-                alert('Vendor berhasil dihapus');
-                location.reload();
+                Swal.fire({
+                    title: 'Berhasil!',
+                    text: 'Vendor berhasil dihapus.',
+                    icon: 'success',
+                    timer: 1500,
+                    showConfirmButton: false
+                }).then(() => {
+                    location.reload();
+                });
             } else {
-                alert('Gagal menghapus vendor');
+                Swal.fire({
+                    title: 'Gagal!',
+                    text: 'Gagal menghapus vendor.',
+                    icon: 'error'
+                });
             }
         }
     </script>

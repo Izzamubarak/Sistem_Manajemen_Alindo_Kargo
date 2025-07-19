@@ -54,10 +54,19 @@ class LaporanExportController extends Controller
         foreach ($paketList as $paket) {
             $biaya = $biayaMap[$paket->resi] ?? null;
 
-            $total_vendor = $biaya->total_vendor ?? 0;
-            $biaya_lain = is_array($biaya->biaya_lainnya)
-                ? collect($biaya->biaya_lainnya)->sum()
-                : ($biaya->biaya_lainnya ?? 0);
+            $total_vendor = $paket->vendors->sum(fn($v) => $v->pivot->biaya_vendor ?? 0);
+
+            $biaya_lain = 0;
+            if ($biaya) {
+                if (is_string($biaya->biaya_lainnya)) {
+                    $decoded = json_decode($biaya->biaya_lainnya, true);
+                    $biaya_lain = is_array($decoded)
+                        ? collect($decoded)->sum(fn($item) => $item['biaya'] ?? 0)
+                        : 0;
+                } elseif (is_array($biaya->biaya_lainnya)) {
+                    $biaya_lain = collect($biaya->biaya_lainnya)->sum(fn($item) => $item['biaya'] ?? 0);
+                }
+            }
 
             $pengeluaran = $total_vendor + $biaya_lain;
             $pendapatan = ($paket->cost ?? 0) - $pengeluaran;
@@ -80,7 +89,6 @@ class LaporanExportController extends Controller
 
             $row++;
         }
-
         // Tambahkan border ke semua sel
         $styleArray = [
             'borders' => [

@@ -18,45 +18,59 @@
                 <label>Deskripsi</label>
                 <input type="text" name="description" class="form-control" required>
             </div>
+
             <div class="form-group">
                 <label>Berat (kg)</label>
                 <input type="number" name="weight" class="form-control" required>
             </div>
+
             <div class="form-group">
                 <label>Jumlah Koli</label>
                 <input type="number" name="jumlah_koli" class="form-control">
             </div>
+
             <div class="form-group">
                 <label>Volume</label>
                 <input type="number" name="volume" class="form-control">
             </div>
+
             <div class="form-group">
                 <label>Kota Asal</label>
                 <input type="text" name="kota_asal" class="form-control">
             </div>
+
             <div class="form-group">
                 <label>Kota Tujuan</label>
                 <input type="text" name="kota_tujuan" class="form-control">
             </div>
+
             <div class="form-group">
                 <label>Nama Penerima</label>
                 <input type="text" name="penerima" class="form-control">
             </div>
+
             <div class="form-group">
                 <label>No HP Penerima</label>
                 <input type="text" name="no_hp_penerima" class="form-control">
             </div>
+
             <div class="form-group">
                 <label>Biaya (Rp)</label>
                 <input type="number" name="cost" class="form-control" required>
             </div>
+
             <div class="form-group">
-                <label>Status</label>
-                <select name="status" class="form-control">
+                <label for="status">Status</label>
+                <select name="status" id="status" class="form-control" onchange="toggleAlasanGagal()" required>
                     <option value="Dalam Proses">Dalam Proses</option>
                     <option value="Terkirim">Terkirim</option>
                     <option value="Gagal">Gagal</option>
                 </select>
+            </div>
+
+            <div class="form-group" id="alasanGagalDiv" style="display: none;">
+                <label for="alasan_gagal">Alasan Gagal</label>
+                <textarea class="form-control" name="alasan_gagal" id="alasan_gagal" rows="3"></textarea>
             </div>
 
             <button class="btn btn-primary">Update</button>
@@ -146,6 +160,7 @@
                     weight: this.weight.value,
                     cost: this.cost.value,
                     status: this.status.value,
+                    alasan_gagal: this.alasan_gagal?.value || null,
                     jumlah_koli: this.jumlah_koli.value,
                     volume: this.volume.value,
                     kota_asal: this.kota_asal.value,
@@ -184,6 +199,55 @@
                     });
                 }
             });
+        });
+
+        function toggleAlasanGagal() {
+            const statusSelect = document.getElementById("status");
+            const alasanDiv = document.getElementById("alasanGagalDiv");
+
+            if (!statusSelect || !alasanDiv) return;
+
+            if (statusSelect.value === "Gagal") {
+                alasanDiv.style.display = "block";
+            } else {
+                alasanDiv.style.display = "none";
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            toggleAlasanGagal();
+
+            const token = localStorage.getItem("token");
+
+            // Ambil role dari /api/user
+            fetch('/api/user', {
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        "Accept": "application/json"
+                    }
+                })
+                .then(res => res.json())
+                .then(user => {
+                    const role = user.role;
+                    const statusSelect = document.getElementById("status");
+                    const alasanDiv = document.getElementById("alasanGagalDiv");
+
+                    // Sembunyikan textarea alasan jika bukan admin
+                    if (role !== "admin" && alasanDiv) {
+                        alasanDiv.style.display = "none";
+                    }
+
+                    // Nonaktifkan dropdown status untuk superadmin
+                    if (role === "superadmin" && statusSelect) {
+                        statusSelect.setAttribute("disabled", true);
+                    }
+
+                    // Event ubah status: hanya admin yang bisa munculkan textarea
+                    if (statusSelect && role === "admin") {
+                        statusSelect.addEventListener("change", toggleAlasanGagal);
+                    }
+                })
+                .catch(err => console.error("Gagal mengambil role user:", err));
         });
     </script>
 

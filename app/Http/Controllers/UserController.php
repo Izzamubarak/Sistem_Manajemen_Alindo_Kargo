@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\PasswordResetRequest;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -78,7 +79,24 @@ class UserController extends Controller
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
-        $tim = User::where('role', 'tim-operasional')->get();
+        $tim = User::where('role', 'tim-operasional')->get()->map(function ($timUser) {
+            $reset = PasswordResetRequest::where('user_id', $timUser->id)
+                ->whereIn('status', ['pending', 'approved']) // hanya tampilkan yang aktif
+                ->latest()
+                ->first();
+
+            return [
+                'id' => $timUser->id,
+                'name' => $timUser->name,
+                'email' => $timUser->email,
+                'username' => $timUser->username,
+                'created_at' => $timUser->created_at,
+                'reset_status' => $reset?->status,
+                'reset_token'  => $reset?->token,
+                'has_requested_reset' => $reset !== null,
+            ];
+        });
+
         return response()->json($tim);
     }
 
@@ -112,8 +130,8 @@ class UserController extends Controller
 
     public function destroyTim($id)
     {
-        $admin = User::where('role', 'tim-operasional')->findOrFail($id);
-        $admin->delete();
+        $tim = User::where('role', 'tim-operasional')->findOrFail($id);
+        $tim->delete();
 
         return response()->json(null, 204);
     }
@@ -130,7 +148,25 @@ class UserController extends Controller
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
-        $admins = User::where('role', 'admin')->get(); // ✅ Ambil semua admin
+        $admins = User::where('role', 'admin')->get()->map(function ($admin) {
+            $reset = PasswordResetRequest::where('user_id', $admin->id)
+                ->whereIn('status', ['pending', 'approved'])
+                ->whereNull('used_at') // hanya yang belum dipakai
+                ->latest()
+                ->first();
+
+            return [
+                'id' => $admin->id,
+                'name' => $admin->name,
+                'email' => $admin->email,
+                'username' => $admin->username,
+                'created_at' => $admin->created_at,
+                'reset_status' => $reset?->status,
+                'reset_token'  => $reset?->token,
+                'has_requested_reset' => $reset !== null,
+            ];
+        });
+
         return response()->json($admins);
     }
 

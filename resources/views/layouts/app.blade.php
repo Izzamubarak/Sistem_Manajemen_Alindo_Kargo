@@ -3,70 +3,80 @@
 
 <head>
     <meta charset="utf-8" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>@yield('title', 'Dashboard')</title>
 
-    <!-- ✅ Bootstrap 4.6 CSS CDN -->
+    <!-- ✅ Bootstrap 4.6 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet" />
 
     <!-- ✅ Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
 
-    <!-- ✅ Local Style -->
-    <link href="{{ secure_asset('css/styles.css') }}" rel="stylesheet" />
+    <!-- ✅ Custom Styles -->
+    <link href="{{ asset('css/styles.css') }}" rel="stylesheet" />
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+
+    <!-- ✅ Datatables -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 </head>
 
 <body class="sb-nav-fixed">
 
-    @include('partials.navbar')
-
+    {{-- Navbar & Sidebar --}}
     <div id="layoutSidenav">
         @include('partials.sidebar')
 
         <div id="layoutSidenav_content">
-            <main>
+            <main class="p-4">
                 @yield('content')
             </main>
+
             @include('partials.footer')
         </div>
     </div>
 
-    <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- ✅ Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ secure_asset('js/scripts.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+    <script src="{{ asset('js/scripts.js') }}"></script>
 
+    <!-- ✅ Session & Token Handling -->
     <script>
         const token = localStorage.getItem("token");
         const path = window.location.pathname;
         const publicPaths = ["/", "/login"];
 
-        // Kalau belum login dan akses halaman privat → tendang ke login
+        // 1. Belum login tapi akses private → redirect login
         if (!token && !publicPaths.includes(path)) {
             window.location.href = "/login";
         }
 
-        // Kalau sudah login tapi masih di halaman login → arahkan ke /home
+        // 2. Sudah login tapi masih di /login → redirect ke /home
         if (token && path === "/login") {
             window.location.href = "/home";
         }
 
-        // Kalau sedang di halaman login → hapus token
+        // 3. Reset token saat di halaman login
         if (path === "/login") {
             localStorage.removeItem("token");
             localStorage.removeItem("user");
         }
+
+        // 4. Cegah back ke halaman setelah logout
+        window.addEventListener('pageshow', function(event) {
+            if (!token && !publicPaths.includes(path) && event.persisted) {
+                window.location.href = "/login";
+            }
+        });
     </script>
-    @stack('scripts')
+
+    <!-- ✅ Logout Handling -->
     <script>
         async function clearToken() {
-            const token = localStorage.getItem("token");
-
             try {
                 await fetch('/api/logout', {
                     method: 'POST',
@@ -76,7 +86,7 @@
                     }
                 });
             } catch (e) {
-                console.warn("Logout API gagal, tapi token tetap dihapus lokal.");
+                console.warn("Gagal logout dari API, lanjut hapus lokal");
             }
 
             localStorage.removeItem("token");
@@ -106,6 +116,8 @@
             }
         });
     </script>
+
+    @stack('scripts')
 </body>
 
 </html>

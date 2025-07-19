@@ -35,44 +35,48 @@
                 created_by: user.id
             };
 
-            const response = await fetch('/api/vendor', {
-                method: 'POST',
-                headers: {
-                    'Authorization': 'Bearer ' + token,
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
-
-            if (res.ok) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Berhasil!',
-                    text: 'User berhasil ditambahkan.',
-                    timer: 2000,
-                    showConfirmButton: false
-                }).then(() => {
-                    window.location.href = '/vendor';
+            try {
+                const response = await fetch('/api/vendor', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(data)
                 });
-            } else {
-                let errorMsg = result.message || "Terjadi kesalahan";
-                if (result.errors) {
-                    errorMsg = Object.values(result.errors).flat().join("\n");
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'Vendor berhasil ditambahkan.',
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        window.location.href = '/vendor';
+                    });
+                } else {
+                    let errorMsg = result.message || "Terjadi kesalahan";
+                    if (result.errors) {
+                        errorMsg = Object.values(result.errors).flat().join("\n");
+                    }
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal menambahkan vendor',
+                        text: errorMsg
+                    });
                 }
+
+            } catch (err) {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Gagal menambahkan user',
-                    text: errorMsg
+                    title: 'Terjadi Kesalahan',
+                    text: err.message
                 });
             }
-
-        } catch (err) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Terjadi Kesalahan',
-                text: err.message
-            });
         });
     </script>
 @endsection

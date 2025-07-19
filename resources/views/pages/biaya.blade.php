@@ -7,27 +7,29 @@
         <button id="btn-export" class="btn btn-success mb-3 ml-2"
             onclick="window.location.href='{{ route('biaya.export') }}'"><i class="fa fa-file-excel"></i> Export
             Excel</button>
-        <div class="table-responsive">
-            <table class="table table-bordered" id="biayaTable">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Resi</th>
-                        <th>Vendor</th>
-                        <th>Total Vendor</th>
-                        <th>Biaya Lainnya</th>
-                        <th>Pengeluaran</th>
-                        <th>Pendapatan</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
+        <div class="card-table">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="biayaTable">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Resi</th>
+                            <th>Vendor</th>
+                            <th>Total Vendor</th>
+                            <th>Biaya Lainnya</th>
+                            <th>Pengeluaran</th>
+                            <th>Pendapatan</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
 
-                <tbody id="biayaBody">
-                    <tr>
-                        <td colspan="8" class="text-center">Memuat data...</td>
-                    </tr>
-                </tbody>
-            </table>
+                    <tbody id="biayaBody">
+                        <tr>
+                            <td colspan="8" class="text-center">Memuat data...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -99,13 +101,29 @@
                             <td>Rp${pengeluaran.toLocaleString()}</td>
                             <td>Rp${pendapatan.toLocaleString()}</td>
                             <td>
-                                <a href="/biaya/edit/${item.id}" class="btn btn-sm btn-warning">Input</a>
+                                <a href="/biaya/edit/${item.id}" class="btn-action btn-edit">
+                                    <i class="fas fa-pen"></i> Input
+                                </a>
                             </td>
                         </tr>
                     `;
                     });
                 }
-
+                setTimeout(() => {
+                    $('#biayaTable').DataTable({
+                        pageLength: 10,
+                        lengthChange: false,
+                        destroy: true,
+                        language: {
+                            search: "Cari:",
+                            paginate: {
+                                previous: "Sebelumnya",
+                                next: "Berikutnya"
+                            },
+                            info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data"
+                        }
+                    });
+                }, 0);
             } catch (error) {
                 tbody.innerHTML =
                     `<tr><td colspan="8" class="text-danger text-center">Error: ${error.message}</td></tr>`;

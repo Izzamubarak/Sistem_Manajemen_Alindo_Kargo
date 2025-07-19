@@ -30,9 +30,13 @@ class BiayaExportController extends Controller
                 $item->total_paket = $paket->cost ?? 0;
             }
 
-            $item->total_biaya_lainnya = is_array($item->biaya_lainnya)
-                ? collect($item->biaya_lainnya)->sum()
-                : ($item->biaya_lainnya ?? 0);
+            $biayaLainnya = is_array($item->biaya_lainnya)
+                ? $item->biaya_lainnya
+                : json_decode($item->biaya_lainnya, true);
+
+            $item->total_biaya_lainnya = is_array($biayaLainnya)
+                ? collect($biayaLainnya)->sum(fn($b) => $b['jumlah'] ?? 0)
+                : 0;
 
             $item->pengeluaran = $item->total_vendor + $item->total_biaya_lainnya;
             $item->pendapatan = $item->total_paket - $item->pengeluaran;

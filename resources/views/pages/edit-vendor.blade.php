@@ -18,6 +18,7 @@
                 <textarea name="address" class="form-control" required></textarea>
             </div>
             <button class="btn btn-primary">Update</button>
+            <a href="/vendor" class="btn btn-secondary">Kembali</a>
         </form>
     </div>
 
