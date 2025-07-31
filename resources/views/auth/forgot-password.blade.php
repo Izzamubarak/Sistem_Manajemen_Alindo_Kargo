@@ -25,8 +25,7 @@
                 @csrf
                 <div class="form-group input-icon">
                     <i class="fas fa-envelope"></i>
-                    <input type="email" class="form-control" name="email" placeholder="Email" required
-                        autocomplete="email" />
+                    <input type="email" class="form-control" name="email" placeholder="Email" required />
                 </div>
                 <button type="submit" class="btn btn-login">Ajukan Reset</button>
             </form>
