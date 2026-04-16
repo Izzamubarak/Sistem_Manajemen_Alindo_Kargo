@@ -49,7 +49,7 @@ class AuthController extends Controller
             'username' => 'required|string|max:255|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
-            'role' => 'nullable|string|in:admin,tim-operasional,super-admin', // Validasi role
+            'role' => 'nullable|string|in:admin,superadmin', // Validasi role
         ]);
 
         if ($validator->fails()) {
@@ -59,13 +59,13 @@ class AuthController extends Controller
             ], 422);
         }
 
-        $role = $request->input('role', 'tim-operasional');
+        $role = $request->input('role', 'admin');
 
-        if ($role !== 'tim-operasional') {
+        if ($role !== 'admin') {
             $authenticatedUser = $request->user();
-            if (!$authenticatedUser || $authenticatedUser->role !== 'super-admin') {
+            if (!$authenticatedUser || $authenticatedUser->role !== 'superadmin') {
                 return response()->json([
-                    'message' => 'Hanya super-admin yang dapat menetapkan role tertentu.'
+                    'message' => 'Hanya superadmin yang dapat menetapkan role tertentu.'
                 ], 403);
             }
         }

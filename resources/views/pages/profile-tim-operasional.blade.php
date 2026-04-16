@@ -40,7 +40,7 @@
             const tbody = document.getElementById('userBody');
 
             try {
-                const response = await fetch('/api/profile/tim-operasional', {
+                const response = await fetch(apiUrl('/api/profile/tim-operasional'), {
                     headers: {
                         'Authorization': 'Bearer ' + token,
                         'Accept': 'application/json'
@@ -80,12 +80,12 @@
                                         ? `<span class="badge bg-success">Disetujui</span><br><code>/reset-password/${user.reset_token}?email=${encodeURIComponent(user.email)}</code>`
                                         : user.reset_status === 'pending'
                                             ? `
-                                                        <span class="badge bg-warning">Menunggu</span><br>
-                                                        <form method="POST" action="/reset-approvals/${user.id}/approve" style="margin-top: 5px;">
-                                                            <input type="hidden" name="_token" value="${csrfToken}">
-                                                            <button type="submit" class="btn btn-sm btn-success">Setujui</button>
-                                                        </form>
-                                                    `
+                                                                <span class="badge bg-warning">Menunggu</span><br>
+                                                                <form method="POST" action="/reset-approvals/${user.id}/approve" style="margin-top: 5px;">
+                                                                    <input type="hidden" name="_token" value="${csrfToken}">
+                                                                    <button type="submit" class="btn btn-sm btn-success">Setujui</button>
+                                                                </form>
+                                                            `
                                             : user.reset_status === 'used'
                                                 ? `<span class="badge bg-secondary">Sudah dipakai</span>`
                                                 : `<span class="badge bg-danger">Status tidak diketahui</span>`
@@ -133,7 +133,7 @@
 
             if (konfirmasi.isConfirmed) {
                 const token = localStorage.getItem("token");
-                const res = await fetch(`/api/profile/tim-operasional/${id}`, {
+                const res = await fetch(apiUrl(`/api/profile/tim-operasional/${id}`), {
                     method: "DELETE",
                     headers: {
                         'Authorization': 'Bearer ' + token,

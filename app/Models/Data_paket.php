@@ -25,7 +25,9 @@ class Data_paket extends Model
         'cost',
         'created_by',
         'status',
-        'alasan_gagal'  
+        'alasan_gagal',
+        'upload_token',
+        'bukti_pengiriman'
     ];
 
 

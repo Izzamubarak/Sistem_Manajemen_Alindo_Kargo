@@ -43,7 +43,7 @@
             }
 
             try {
-                const check = await fetch('/api/user', {
+                const check = await fetch(apiUrl('/api/user'), {
                     method: 'GET',
                     headers: {
                         'Authorization': 'Bearer ' + token,
@@ -68,7 +68,7 @@
                     role: 'tim-operasional'
                 };
 
-                const res = await fetch('/api/register', {
+                const res = await fetch(apiUrl('/api/register'), {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

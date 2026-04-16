@@ -36,7 +36,7 @@
             };
 
             try {
-                const response = await fetch('/api/vendor', {
+                const response = await fetch(apiUrl('/api/vendor'), {
                     method: 'POST',
                     headers: {
                         'Authorization': 'Bearer ' + token,

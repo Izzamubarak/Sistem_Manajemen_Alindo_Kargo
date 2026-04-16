@@ -106,7 +106,7 @@
             const token = localStorage.getItem('token');
 
             try {
-                const userRes = await fetch('/api/user', {
+                const userRes = await fetch(apiUrl('/api/user'), {
                     headers: {
                         'Authorization': 'Bearer ' + token,
                         'Accept': 'application/json'
@@ -114,7 +114,7 @@
                 });
                 userData = await userRes.json();
 
-                const vendorRes = await fetch('/api/vendor', {
+                const vendorRes = await fetch(apiUrl('/api/vendor'), {
                     headers: {
                         'Authorization': 'Bearer ' + token,
                         'Accept': 'application/json'
@@ -202,7 +202,7 @@
             }
 
             try {
-                const response = await fetch('/api/paket', {
+                const response = await fetch(apiUrl('/api/paket'), {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

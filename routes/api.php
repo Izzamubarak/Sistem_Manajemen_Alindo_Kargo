@@ -11,6 +11,7 @@ use App\Http\Controllers\VendorController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\InvoiceController;
 
+
 // =====================
 // PUBLIC ROUTES
 // =====================
@@ -66,12 +67,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('{id}', [VendorController::class, 'destroy']);
     });
 
-    // Tim Operasional Routes
-    Route::prefix('tim')->group(function () {
-        Route::get('/', [UserController::class, 'timIndex']);
-        Route::post('/', [UserController::class, 'timStore']);
-        Route::delete('{id}', [UserController::class, 'timDestroy']);
-    });
+
 
     // Profile Routes
     Route::prefix('profile')->group(function () {
@@ -80,9 +76,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/admin', [UserController::class, 'showAdmin']);
         Route::put('/admin', [UserController::class, 'updateAdmin']);
         Route::delete('/admin/{id}', [UserController::class, 'destroyAdmin']);
-        Route::get('/tim-operasional', [UserController::class, 'showTim']);
-        Route::put('/tim-operasional', [UserController::class, 'updateTim']);
-        Route::delete('/tim-operasional/{id}', [UserController::class, 'destroyTim']);
+
             
     });
     

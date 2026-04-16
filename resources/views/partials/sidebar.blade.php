@@ -27,12 +27,6 @@
                         <span class="menu-text">Admin</span>
                     </a>
                 </li>
-                <li>
-                    <a href="{{ url('/profile-tim-operasional') }}">
-                        <i class="fas fa-user-cog"></i>
-                        <span class="menu-text">Tim Operasional</span>
-                    </a>
-                </li>
             </ul>
         </li>
         <li id="vendor">
@@ -92,7 +86,7 @@
         }
 
         try {
-            const res = await fetch('/api/user', {
+            const res = await fetch(apiUrl('/api/user'), {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -105,12 +99,7 @@
             const user = await res.json();
             const role = user.role;
 
-            if (role === 'tim-operasional') {
-                document.getElementById('karyawan')?.style.setProperty('display', 'none');
-                document.getElementById('biaya')?.style.setProperty('display', 'none');
-                document.getElementById('laporan')?.style.setProperty('display', 'none');
-                document.getElementById('vendor')?.style.setProperty('display', 'none');
-            }
+
 
             if (role === 'admin') {
                 document.getElementById('karyawan')?.style.setProperty('display', 'none');

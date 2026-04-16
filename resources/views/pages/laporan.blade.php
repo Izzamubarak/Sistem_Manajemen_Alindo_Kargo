@@ -3,7 +3,7 @@
 @section('content')
     @include('partials.header', ['title' => 'Laporan', 'breadcrumb' => 'Laporan bulan ini'])
 
-    <div class="container mt-4">
+    <div class="container-fluid px-0">
         <form method="GET" class="row g-3 mb-3">
             <div class="col-md-3">
                 <label for="bulan">Pilih Bulan</label>

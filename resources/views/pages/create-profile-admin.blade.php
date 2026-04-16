@@ -40,7 +40,7 @@
             }
 
             try {
-                const check = await fetch('/api/user', {
+                const check = await fetch(apiUrl('/api/user'), {
                     method: 'GET',
                     headers: {
                         'Authorization': 'Bearer ' + token,
@@ -51,8 +51,8 @@
                 if (!check.ok) throw new Error('Gagal memverifikasi pengguna');
 
                 const user = await check.json();
-                if (user.role !== 'super-admin') {
-                    alert('Hanya super-admin yang dapat menambahkan user admin.');
+                if (user.role !== 'superadmin') {
+                    alert('Hanya superadmin yang dapat menambahkan user admin.');
                     return;
                 }
 
@@ -65,7 +65,7 @@
                     role: 'admin'
                 };
 
-                const res = await fetch('/api/register', {
+                const res = await fetch(apiUrl('/api/register'), {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

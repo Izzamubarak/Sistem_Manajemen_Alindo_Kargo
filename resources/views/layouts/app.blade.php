@@ -14,8 +14,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
 
     <!-- ✅ Custom Styles -->
-    <link href="{{ secure_asset('css/styles.css') }}" rel="stylesheet" />
-    <link rel="icon" type="image/png" href="{{ secure_asset('favicon.png') }}">
+    <link href="{{ asset('css/styles.css') }}" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
 
     <!-- ✅ Datatables -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
@@ -42,7 +42,14 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="{{ secure_asset('js/scripts.js') }}"></script>
+    <script src="{{ asset('js/scripts.js') }}"></script>
+    <script>
+        window.APP_URL = "{{ url('/') }}";
+
+        function apiUrl(path) {
+            return window.APP_URL + path;
+        }
+    </script>
 
     <!-- ✅ Session & Token Handling -->
     <script>
@@ -78,7 +85,7 @@
     <script>
         async function clearToken() {
             try {
-                await fetch('/api/logout', {
+                await fetch(apiUrl('/api/logout'), {
                     method: 'POST',
                     headers: {
                         'Authorization': 'Bearer ' + token,

@@ -3,12 +3,12 @@
 @section('content')
     @include('partials.header', ['title' => 'Admin', 'breadcrumb' => 'Kelola akun admin'])
 
-    <div class="container mt-4">
+    <div class="container-fluid px-0">
         <button id="btn-paket" class="btn btn-primary mb-3" onclick="window.location.href='/profile-admin/create'">Tambah
             User</button>
-        <div class="card-table">
-            <div class="table-responsive">
-                <table class="table table-bordered" id="userTable">
+        <div class="card-table" id="card-table" style="width: 100%;">
+            <div class="table-responsive" style="width: 100%;">
+                <table class="table table-bordered" id="userTable" style="width: 100%;">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -37,7 +37,7 @@
             const tbody = document.getElementById('userBody');
 
             try {
-                const response = await fetch('/api/profile/admin', {
+                const response = await fetch(apiUrl('/api/profile/admin'), {
                     headers: {
                         'Authorization': 'Bearer ' + token,
                         'Accept': 'application/json'
@@ -77,12 +77,12 @@
                                         ? `<span class="badge bg-success">Disetujui</span><br><code>/reset-password/${user.reset_token}?email=${encodeURIComponent(user.email)}</code>`
                                         : user.reset_status === 'pending'
                                             ? `
-                                                    <span class="badge bg-warning">Menunggu</span><br>
-                                                    <form method="POST" action="/reset-approvals/${user.id}/approve" style="margin-top: 5px;">
-                                                        <input type="hidden" name="_token" value="${csrfToken}">
-                                                        <button type="submit" class="btn btn-sm btn-success">Setujui</button>
-                                                    </form>
-                                                `
+                                                                <span class="badge bg-warning">Menunggu</span><br>
+                                                                <form method="POST" action="/reset-approvals/${user.id}/approve" style="margin-top: 5px;">
+                                                                    <input type="hidden" name="_token" value="${csrfToken}">
+                                                                    <button type="submit" class="btn btn-sm btn-success">Setujui</button>
+                                                                </form>
+                                                            `
                                             : user.reset_status === 'used'
                                                 ? `<span class="badge bg-secondary">Sudah dipakai</span>`
                                                 : `<span class="badge bg-danger">Status tidak diketahui</span>`
@@ -130,7 +130,7 @@
 
             if (konfirmasi.isConfirmed) {
                 const token = localStorage.getItem("token");
-                const res = await fetch(`/api/profile/admin/${id}`, {
+                const res = await fetch(apiUrl(`/api/profile/admin/${id}`), {
                     method: "DELETE",
                     headers: {
                         'Authorization': 'Bearer ' + token,
@@ -161,7 +161,7 @@
         function ajukanReset(email) {
             if (!confirm(`Ajukan reset password untuk ${email}?`)) return;
 
-            fetch('/forgot-password', {
+            fetch(apiUrl('/forgot-password'), {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

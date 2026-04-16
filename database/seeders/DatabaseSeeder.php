@@ -9,9 +9,6 @@ use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
         User::create([
@@ -19,16 +16,7 @@ class DatabaseSeeder extends Seeder
             'username' => 'superadmin',
             'email' => 'superadmin@alindo.com',
             'password' => Hash::make('password123'),
-            'role' => 'super-admin',
+            'role' => 'superadmin',
         ]);
     }
-    // public function run(): void
-    // {
-    //     // User::factory(10)->create();
-
-    //     User::factory()->create([
-    //         'name' => 'Test User',
-    //         'email' => 'test@example.com',
-    //     ]);
-    // }
 }

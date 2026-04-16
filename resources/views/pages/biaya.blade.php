@@ -3,7 +3,7 @@
 @section('content')
     @include('partials.header', ['title' => 'Biaya Operasional', 'breadcrumb' => 'Data biaya operasional'])
 
-    <div class="container">
+    <div class="container-fluid px-0">
         <button id="btn-export" class="btn btn-success mb-3 ml-2"
             onclick="window.location.href='{{ route('biaya.export') }}'"><i class="fa fa-file-excel"></i> Export
             Excel</button>
@@ -42,7 +42,7 @@
             if (!token) return window.location.href = '/login';
 
             try {
-                const resUser = await fetch('/api/user', {
+                const resUser = await fetch(apiUrl('/api/user'), {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
@@ -50,9 +50,9 @@
                 });
 
                 const user = await resUser.json();
-                if (user.role !== 'super-admin') btnExport.style.display = 'none';
+                if (user.role !== 'superadmin') btnExport.style.display = 'none';
 
-                const resData = await fetch('/api/biaya', {
+                const resData = await fetch(apiUrl('/api/biaya'), {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Accept': 'application/json'

@@ -3,7 +3,7 @@
 @section('content')
     @include('partials.header', ['title' => 'Vendor', 'breadcrumb' => 'Data vendor'])
 
-    <div class="container">
+    <div class="container-fluid px-0">
         <a href="/vendor/create" class="btn btn-primary mb-3">Tambah Vendor</a>
         <div class="card-table">
             <div class="table-responsive">
@@ -33,7 +33,7 @@
             const tbody = document.getElementById('vendorBody');
 
             try {
-                const res = await fetch('/api/vendor', {
+                const res = await fetch(apiUrl('/api/vendor'), {
                     headers: {
                         'Authorization': 'Bearer ' + token,
                         'Accept': 'application/json'
@@ -103,7 +103,7 @@
 
             const token = localStorage.getItem('token');
 
-            const res = await fetch(`/api/vendor/${id}`, {
+            const res = await fetch(apiUrl(`/api/vendor/${id}`), {
                 method: 'DELETE',
                 headers: {
                     'Authorization': 'Bearer ' + token,

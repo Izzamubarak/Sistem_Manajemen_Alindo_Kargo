@@ -25,7 +25,7 @@ class ResetRequestController extends Controller
             return back()->withErrors(['email' => 'Email tidak ditemukan.']);
         }
 
-        if ($user->role === 'super-admin') {
+        if ($user->role === 'superadmin') {
             $token = Str::random(60);
             return redirect()->route('reset.form', ['token' => $token, 'email' => $user->email]);
         }

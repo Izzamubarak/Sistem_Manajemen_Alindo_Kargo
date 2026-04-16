@@ -37,7 +37,7 @@
             const role = "tim-operasional"; // karena halaman ini khusus tim-operasional
 
             // Ambil data tim-operasional
-            const res = await fetch(`/api/profile/${role}`, {
+            const res = await fetch(apiUrl(`/api/profile/${role}`), {
                 headers: {
                     "Authorization": "Bearer " + token,
                     "Accept": "application/json",
@@ -71,7 +71,7 @@
                     formData.password = this.password.value;
                 }
 
-                const updateRes = await fetch(`/api/profile/${role}`, {
+                const updateRes = await fetch(apiUrl(`/api/profile/${role}`), {
                     method: "PUT",
                     headers: {
                         "Authorization": "Bearer " + token,

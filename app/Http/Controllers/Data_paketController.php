@@ -41,6 +41,7 @@ class Data_paketController extends Controller
         ]);
 
         $validated['status'] = $validated['status'] ?? 'Dalam Proses';
+        $validated['upload_token'] = (string) \Illuminate\Support\Str::uuid();
 
         $paket = Data_paket::create($validated);
 

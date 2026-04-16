@@ -2,6 +2,7 @@
 
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\HomeController;
@@ -11,6 +12,11 @@ use App\Http\Controllers\BiayaExportController;
 use App\Http\Controllers\ResetRequestController;
 use App\Http\Controllers\LaporanExportController;
 use App\Http\Controllers\ResetApprovalController;
+
+use App\Http\Controllers\UploadBuktiController;
+
+Route::get('/upload-bukti/{token}', [UploadBuktiController::class, 'showForm'])->name('upload-bukti.form');
+Route::post('/upload-bukti/{token}', [UploadBuktiController::class, 'upload'])->name('upload-bukti.submit');
 
 Route::get('/', function () {
     return redirect('/login');
@@ -45,16 +51,6 @@ Route::get('/profile-admin/edit/{id}', function ($id) {
 })->name('profile-admin.edit');
 
 
-
-Route::get('/profile-tim-operasional', function () {
-    return view('pages.profile-tim-operasional');
-});
-Route::get('/profile-tim-operasional/create', function () {
-    return view('pages.create-profile-tim-operasional');
-});
-Route::get('/profile-tim-operasional/edit/{id}', function ($id) {
-    return view('pages.edit-profile-tim-operasional', ['id' => $id]);
-})->name('profile-tim-operasional.edit');
 
 
 Route::get('/biaya', function () {
@@ -102,3 +98,19 @@ Route::post('/logout', function () {
     Auth::logout();
     return redirect('/login');
 })->name('logout');
+
+Route::post('/login', function (Request $request) {
+
+    if (Auth::attempt([
+        'email' => $request->email,
+        'password' => $request->password
+    ])) {
+
+        $request->session()->regenerate();
+        return redirect('/home');
+    }
+
+    return back()->withErrors([
+        'email' => 'Email atau password salah'
+    ]);
+});

@@ -3,7 +3,7 @@
 @section('content')
     @include('partials.header', ['title' => 'Paket', 'breadcrumb' => 'Data paket'])
 
-    <div class="container">
+    <div class="container-fluid px-0">
         <button id="btn-paket" class="btn btn-primary mb-3" onclick="window.location.href='/paket/create'">Tambah
             Paket</button>
         <div class="card-table" id="card-table">
@@ -26,6 +26,7 @@
                             <th>Pengirim</th>
                             <th>Tanggal</th>
                             <th>Status</th>
+                            <th>Bukti Pengiriman</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -50,7 +51,7 @@
 
             let role = '';
             try {
-                const res = await fetch('/api/user', {
+                const res = await fetch(apiUrl('/api/user'), {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -63,14 +64,8 @@
                 const user = await res.json();
                 role = user.role;
 
-                if (role === 'tim-operasional') {
-                    document.getElementById('card-table').style.display = 'none';
-                }
-                if (role === 'super-admin' || role === 'admin') {
+                if (role === 'superadmin') {
                     btnPaket.style.display = 'none';
-                }
-                if (role === 'tim-operasional') {
-                    paketTable.style.display = 'none';
                 }
             } catch (error) {
                 tbody.innerHTML =
@@ -79,7 +74,7 @@
             }
 
             try {
-                const response = await fetch('/api/paket', {
+                const response = await fetch(apiUrl('/api/paket'), {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Accept': 'application/json'
@@ -115,15 +110,26 @@
                         </button>
                     `;
 
-                    if (role !== 'admin') {
+                    if (role === 'superadmin') {
                         actionButtons += `
                         <button class="btn-action btn-delete" onclick="hapusPaket(${item.id})">
                             <i class="fas fa-trash"></i> Hapus
                         </button>
+                        `;
+                    }
+
+                    actionButtons += `
                         <button class="btn-action btn-invoice" onclick="cetakInvoice(${item.id})">
                             <i class="fas fa-file-invoice"></i> Invoice
                         </button>
                         `;
+
+                    if (item.upload_token) {
+                        actionButtons += `
+                            <button class="btn-action btn-info" onclick="copyUploadLink('${item.upload_token}')">
+                                <i class="fas fa-link"></i> Link Upload
+                            </button>
+                            `;
                     }
 
                     tbody.innerHTML += `
@@ -145,6 +151,9 @@
                     <td>
                         <span class="badge ${badgeClass}">${item.status || 'Dalam Proses'}</span>
                         ${item.status === 'Gagal' && item.alasan_gagal ? `<br><small class="text-danger"><strong>Alasan:</strong> ${item.alasan_gagal}</small>` : ''}
+                    </td>
+                    <td>
+                        ${item.bukti_pengiriman ? `<a href="/storage/${item.bukti_pengiriman}" target="_blank"><img src="/storage/${item.bukti_pengiriman}" width="80" style="border-radius:8px;"></a>` : '<span class="badge badge-secondary">Belum ada</span>'}
                     </td>
                     <td>${actionButtons}</td>
                 </tr>
@@ -175,6 +184,22 @@
             window.location.href = `/paket/edit/${id}`;
         }
 
+        function copyUploadLink(token) {
+            const url = window.location.origin + '/upload-bukti/' + token;
+            navigator.clipboard.writeText(url).then(() => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Disalin!',
+                    text: 'Link upload berhasil disalin ke clipboard.',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+                prompt('Copy link:', url);
+            });
+        }
+
         function cetakInvoice(id) {
             const token = localStorage.getItem("token");
             window.open(`/invoice/download?package_id=${id}`, '_blank');
@@ -195,7 +220,7 @@
             if (!confirmResult.isConfirmed) return;
 
             const token = localStorage.getItem("token");
-            const res = await fetch(`/api/paket/${id}`, {
+            const res = await fetch(apiUrl(`/api/paket/${id}`), {
                 method: "DELETE",
                 headers: {
                     'Authorization': 'Bearer ' + token,

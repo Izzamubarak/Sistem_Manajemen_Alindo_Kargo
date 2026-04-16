@@ -10,7 +10,7 @@
             <input type="hidden" name="id" id="paketId">
 
             <div class="form-group">
-                <label>Penginput (Tim Operasional)</label>
+                <label>Penginput</label>
                 <input type="text" name="creator_name" class="form-control" readonly>
             </div>
 
@@ -73,6 +73,14 @@
                 <textarea class="form-control" name="alasan_gagal" id="alasan_gagal" rows="3"></textarea>
             </div>
 
+            <div id="buktiPengirimanContainer" class="form-group" style="display: none;">
+                <label>Foto Bukti Pengiriman</label>
+                <div class="mt-2">
+                    <img id="buktiPengirimanImg" src="" alt="Bukti Pengiriman"
+                        style="max-width: 100%; max-height: 400px; border-radius: 8px; border: 1px solid #ddd;">
+                </div>
+            </div>
+
             <button class="btn btn-primary">Update</button>
             <a href="/paket" class="btn btn-secondary">Kembali</a>
         </form>
@@ -108,13 +116,13 @@
             const token = localStorage.getItem("token");
 
             const [paketRes, vendorRes] = await Promise.all([
-                fetch(`/api/paket/${id}`, {
+                fetch(apiUrl(`/api/paket/${id}`), {
                     headers: {
                         Authorization: "Bearer " + token,
                         Accept: "application/json"
                     }
                 }),
-                fetch('/api/vendor', {
+                fetch(apiUrl('/api/vendor'), {
                     headers: {
                         Authorization: "Bearer " + token,
                         Accept: "application/json"
@@ -141,6 +149,11 @@
 
             if (data.vendors && data.vendors.length > 0) {
                 data.vendors.forEach(v => tambahVendor(v.id, v.pivot?.biaya_vendor ?? 0));
+            }
+
+            if (data.bukti_pengiriman) {
+                document.getElementById('buktiPengirimanContainer').style.display = 'block';
+                document.getElementById('buktiPengirimanImg').src = '/storage/' + data.bukti_pengiriman;
             }
 
             document.getElementById("editForm").addEventListener("submit", async function(e) {
@@ -171,7 +184,7 @@
                     vendor_biayas: vendorBiayas
                 };
 
-                const resUpdate = await fetch(`/api/paket/${data.id}`, {
+                const resUpdate = await fetch(apiUrl(`/api/paket/${data.id}`), {
                     method: "PUT",
                     headers: {
                         "Authorization": "Bearer " + token,
@@ -220,7 +233,7 @@
             const token = localStorage.getItem("token");
 
             // Ambil role dari /api/user
-            fetch('/api/user', {
+            fetch(apiUrl('/api/user'), {
                     headers: {
                         "Authorization": "Bearer " + token,
                         "Accept": "application/json"

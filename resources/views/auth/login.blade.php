@@ -43,18 +43,17 @@
             const email = document.querySelector('input[name="email"]').value;
             const password = document.querySelector('input[name="password"]').value;
 
-            const response = await fetch(
-                'https://sistemmanajemenalindokargo-production-a8a4.up.railway.app/api/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        email: email,
-                        password: password
-                    })
-                });
+            const response = await fetch(apiUrl('/api/login'), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
+            });
 
             const result = await response.json();
             const errorDiv = document.getElementById("errorMessage");
